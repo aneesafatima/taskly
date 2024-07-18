@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/ErrorHandler");
+const { promisify } = require("util");
 
 const sendToken = (user, statusCode, res) => {
   const token = createSendToken(user._id);
@@ -33,10 +34,7 @@ exports.signUp = async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  res.status(201).json({
-    status: "success",
-    data: user,
-  });
+  sendToken(user, 201, res);
 };
 
 exports.logIn = async (req, res, next) => {
@@ -50,4 +48,35 @@ exports.logIn = async (req, res, next) => {
   sendToken(user, 200, res);
 };
 
+exports.protect = async (req, res, next) => {
+  let token;
+  const { authorization } = req.headers;
+  if (authorization && authorization.startsWith("B"))
+    token = authorization.split(" ")[1];
+  else if (req.cookies.jwt) token = req.cookies.jwt;
+  if (!token)
+    return next(
+      new ErrorHandler(
+        "You are not logged in ! Please log in to access the page."
+      )
+    );
+  try {
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    const currentUser = await User.findOne({ _id: decoded.id });
+    if (!currentUser)
+      return next(
+        new ErrorHandler("There is no user belonging to this Id", 400)
+      );
+    req.user = currentUser;
+    res.status(200).json({
+      status: "success",
+      currentUser,
+    });
+  } catch (err) {
+    return next(new ErrorHandler("The token is invalid", 404));
+  }
 
+  //promisify returns a promise based version of the jwt.verify function which we are immediatedly calling in the next step
+
+  next();
+};
