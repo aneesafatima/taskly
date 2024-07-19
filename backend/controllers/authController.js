@@ -68,10 +68,10 @@ exports.protect = async (req, res, next) => {
         new ErrorHandler("There is no user belonging to this Id", 400)
       );
     req.user = currentUser;
-    res.status(200).json({
-      status: "success",
-      currentUser,
-    });
+    // res.status(200).json({
+    //   status: "success",
+    //   currentUser,
+    // });
   } catch (err) {
     return next(new ErrorHandler("The token is invalid", 404));
   }
