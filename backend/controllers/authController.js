@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { promisify } = require("util");
+const catchAsync = require( "../utils/catchAsync" );
 
 const sendToken = (user, statusCode, res) => {
   const token = createSendToken(user._id);
@@ -27,7 +28,7 @@ const createSendToken = (id) => {
   });
 };
 
-exports.signUp = async (req, res, next) => {
+exports.signUp = catchAsync(async (req, res, next) => {
   const user = await User.create({
     email: req.body.email,
     password: req.body.password,
@@ -35,9 +36,9 @@ exports.signUp = async (req, res, next) => {
   });
 
   sendToken(user, 201, res);
-};
+});
 
-exports.logIn = async (req, res, next) => {
+exports.logIn = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password)
     return next(new ErrorHandler("Please enter email or password", 401));
@@ -46,9 +47,9 @@ exports.logIn = async (req, res, next) => {
   if (!user || !passMismatched)
     return next(new ErrorHandler("Invalid email or password", 401));
   sendToken(user, 200, res);
-};
+});
 
-exports.protect = async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   let token;
   const { authorization } = req.headers;
   if (authorization && authorization.startsWith("B"))
@@ -68,10 +69,6 @@ exports.protect = async (req, res, next) => {
         new ErrorHandler("There is no user belonging to this Id", 400)
       );
     req.user = currentUser;
-    // res.status(200).json({
-    //   status: "success",
-    //   currentUser,
-    // });
   } catch (err) {
     return next(new ErrorHandler("The token is invalid", 404));
   }
@@ -79,4 +76,8 @@ exports.protect = async (req, res, next) => {
   //promisify returns a promise based version of the jwt.verify function which we are immediatedly calling in the next step
 
   next();
-};
+});
+
+exports.logOut = (req,res) => {
+
+}
