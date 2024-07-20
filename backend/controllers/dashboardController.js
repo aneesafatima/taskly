@@ -1,3 +1,6 @@
 exports.getDashboardData = (req,res,next) =>{
-    console.log("Hello from dashboard")
+    res.status(200).json({
+        status: "success",
+        user: req.user
+    })
 }

@@ -2,16 +2,18 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { promisify } = require("util");
-const catchAsync = require( "../utils/catchAsync" );
+const catchAsync = require("../utils/catchAsync");
 
 const sendToken = (user, statusCode, res) => {
   const token = createSendToken(user._id);
+  console.log(token);
   res.cookie("jwt", token, {
     expires: new Date(
       Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ), //this property expects a date object
     secure: process.env.NODE_ENV === "development" ? false : true,
-    //only when in dev mode send the cover over http otherwise https
+    path: "/",
+    //only when in dev mode send the cookie over http otherwise https
     httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
   });
 
@@ -34,7 +36,6 @@ exports.signUp = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
-
   sendToken(user, 201, res);
 });
 
@@ -52,32 +53,26 @@ exports.logIn = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   const { authorization } = req.headers;
+  console.log(req.cookies);
   if (authorization && authorization.startsWith("B"))
     token = authorization.split(" ")[1];
   else if (req.cookies.jwt) token = req.cookies.jwt;
   if (!token)
     return next(
       new ErrorHandler(
-        "You are not logged in ! Please log in to access the page."
+        "You are not logged in ! Please log in to access the page.", 400
       )
     );
-  try {
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    const currentUser = await User.findOne({ _id: decoded.id });
-    if (!currentUser)
-      return next(
-        new ErrorHandler("There is no user belonging to this Id", 400)
-      );
-    req.user = currentUser;
-  } catch (err) {
-    return next(new ErrorHandler("The token is invalid", 404));
-  }
+
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const currentUser = await User.findOne({ _id: decoded.id });
+  if (!currentUser)
+    return next(new ErrorHandler("There is no user belonging to this Id", 400));
+  req.user = currentUser;
 
   //promisify returns a promise based version of the jwt.verify function which we are immediatedly calling in the next step
 
   next();
 });
 
-exports.logOut = (req,res) => {
-
-}
+exports.logOut = (req, res) => {};
