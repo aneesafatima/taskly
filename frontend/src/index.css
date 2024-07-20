@@ -3,6 +3,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.thick-stroke path, .thick-stroke rect{
-stroke-width: 0.5px;
+.thick-stroke path,
+.thick-stroke rect {
+  stroke-width: 0.5px;
+}
+.form-item input:valid ~ .check,
+.auth-form input:invalid ~ .cross {
+  display: block;
+}
+.form-item input:valid ~ .cross,
+.auth-form input:invalid ~ .check {
+  display: none;
+}
+.form-item input:placeholder-shown ~ .cross {
+  display: none !important;
 }
