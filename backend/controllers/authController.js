@@ -6,7 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 
 const sendToken = (user, statusCode, res) => {
   const token = createSendToken(user._id);
-  console.log(token);
+
   res.cookie("jwt", token, {
     expires: new Date(
       Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
@@ -53,14 +53,15 @@ exports.logIn = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   const { authorization } = req.headers;
-  console.log(req.cookies);
+
   if (authorization && authorization.startsWith("B"))
     token = authorization.split(" ")[1];
   else if (req.cookies.jwt) token = req.cookies.jwt;
   if (!token)
     return next(
       new ErrorHandler(
-        "You are not logged in ! Please log in to access the page.", 400
+        "You are not logged in ! Please log in to access the page.",
+        400
       )
     );
 
