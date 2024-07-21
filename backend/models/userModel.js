@@ -3,6 +3,10 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "A user must have a name"]
+  },
   email: {
     type: String,
     unique: true,
@@ -14,6 +18,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "A user must have a password"],
     minLength: 8,
+    select: false
   },
   passwordConfirm: {
     type: String,

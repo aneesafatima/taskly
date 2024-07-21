@@ -7,6 +7,9 @@ export default {
         lato: ["Lato", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
       },
+      colors: {
+        "nav-color" : "var(--main-nav-color)"
+      }
     },
   },
   plugins: [],

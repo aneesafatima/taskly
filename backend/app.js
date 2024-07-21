@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 app.use(
   cors({
     origin: "http://localhost:5173", // Allow requests from this origin
-    credentials: true // Allows credentials (cookies) to be sent
+    credentials: true, // Allows credentials (cookies) to be sent
   })
 );
 app.use(express.json());
