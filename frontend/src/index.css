@@ -2,6 +2,7 @@
 :root{
   --main-nav-color: #f0f0f063;
   --main-bg-color: white;
+  --main-border-color: #767575;
 }
 @tailwind base;
 @tailwind components;
@@ -30,6 +31,7 @@ body{
 .darkmode{
   --main-nav-color : #1c1d1d77;
   --main-bg-color: black;
+  --main-border-color: #3e3d3d;
 }
 .text-white {
   color: white;

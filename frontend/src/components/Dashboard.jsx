@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { NavBar } from ".";
+import { NavBar, Tasks } from ".";
 
 function dashboard() {
   const [giveAccess, seTGiveAccess] = useState(false);
@@ -27,10 +27,11 @@ function dashboard() {
   if (!giveAccess) return <div>{errMessage}</div>;
   return (
     giveAccess && (
-      <div>
+      <div className="flex">
         <NavBar user={user} />
         {/* Hello from dashboard
         <div className="w-40 h-32 bg-green-300 rounded-lg "></div> */}
+        <Tasks/>
       </div>
     )
   );

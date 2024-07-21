@@ -31,7 +31,7 @@ function NavBar({ user }) {
           Focus.Prioritize.Execute
         </span>
       </div>
-      <div className="user m-2 rounded-xl h-14 mb-12 border-[1px] border-[#e2e2e2] flex items-center p-3">
+      <div className="user m-2 rounded-xl h-14 mb-12 border-[1px] border-border-color flex items-center p-3">
         <img src="" alt="" className="bg-blue-500 w-7 h-7 rounded-full mr-2" />
         <div className="flex flex-col">
           <span className="font-bold font-roboto text-sm mode-items">
