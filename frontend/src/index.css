@@ -2,7 +2,9 @@
 :root{
   --main-nav-color: #f0f0f063;
   --main-bg-color: white;
-  --main-border-color: #767575;
+  --main-border-color: #9e9e9e;
+  --task-card-color: #e2e2e26a;
+  --priority-color: black;
 }
 @tailwind base;
 @tailwind components;
@@ -32,6 +34,8 @@ body{
   --main-nav-color : #1c1d1d77;
   --main-bg-color: black;
   --main-border-color: #3e3d3d;
+  --task-card-color: #35353577;
+  --priority-color: white;
 }
 .text-white {
   color: white;

@@ -25,9 +25,9 @@ const taskSchema = new mongoose.Schema({
     enum: ["low", "medium", "high"],
     default: "low",
   },
-  Status: {
+  status: {
     type: String,
-    enum: ["to-do", "in progress", "completed"],
+    enum: ["todo", "progress", "completed"],
     default: "to-do",
   },
   tags: {
@@ -41,6 +41,12 @@ const taskSchema = new mongoose.Schema({
     ref: "User", // Reference
     required: [true, "a task must belong to a user"],
   },
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  },
+  startTime: Date,
+  endType: Date
 });
 
 //Middleware to set the lastUpdated automatically the first time

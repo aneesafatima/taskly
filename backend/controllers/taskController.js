@@ -24,6 +24,7 @@ exports.deleteTask = catchAsync(async (req, res, next) => {
 });
 
 exports.updateTask = catchAsync(async (req, res, next) => {
+  //filter tasks so only certain fields can be updated
   const updatedTask = await Task.findByIdAndUpdate(req.params.taskId, req.body, {
     runValidators: true,
     new: true,

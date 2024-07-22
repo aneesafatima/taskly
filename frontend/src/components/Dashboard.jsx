@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { NavBar, Tasks } from ".";
 
+
 function dashboard() {
   const [giveAccess, seTGiveAccess] = useState(false);
   const [errMessage, setErrMessage] = useState("");
   const [user, setUser] = useState("");
+  const [tasks, setTasks] = useState([]);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -16,6 +18,9 @@ function dashboard() {
         if (res.data?.status === "success") {
           seTGiveAccess(true);
           setUser(res.data.user);
+          console.log(res)
+       
+          setTasks(res.data.tasks)
         }
       } catch (err) {
         setErrMessage(err.response?.data.message);
@@ -31,7 +36,7 @@ function dashboard() {
         <NavBar user={user} />
         {/* Hello from dashboard
         <div className="w-40 h-32 bg-green-300 rounded-lg "></div> */}
-        <Tasks/>
+        <Tasks tasks={tasks}/>
       </div>
     )
   );

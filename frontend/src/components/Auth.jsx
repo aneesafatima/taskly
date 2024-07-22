@@ -70,7 +70,7 @@ function auth() {
           className="auth-form flex flex-col space-y-5 mt-4 "
           onSubmit={handleFormSubmission}
         >
-          <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
+          {authStatus === "signup" && <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
             <CiUser size={18} color="black" className="thick-stroke" />
             <input
               type="name"
@@ -83,7 +83,7 @@ function auth() {
             />
             <FaCircleCheck fill="green" className="check " />
             <MdCancel size={17} fill="red" className="cross " />
-          </div>
+          </div>}
           <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
             <IoMailOutline size={18} color="black" />
             <input
