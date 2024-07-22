@@ -5,11 +5,10 @@ import { MdLightMode } from "react-icons/md";
 import { MdDarkMode } from "react-icons/md";
 import { SiTask } from "react-icons/si";
 
-function NavBar({ user }) {
-  const [mode, setMode] = useState("light");
+function NavBar({ user, mode, setMode }) {
+ 
   useEffect(() => {
     setTimeout(() => {
-
       document.querySelector(".nav-bar").style.transform = "translate(0)"
     }, 100)
   }, [])
@@ -21,7 +20,7 @@ function NavBar({ user }) {
       .forEach((el) => el.classList.toggle("text-white"));
   };
   return (
-    <nav className="nav-bar w-56 bg-nav-color h-screen cursor-default pt-4 relative -translate-x-full transition-all duration-1000">
+    <nav className="nav-bar w-52 bg-nav-color h-screen cursor-default pt-4 relative -translate-x-full transition-all duration-1000">
       <div className=" mb-5 pl-3">
         <h2 className="font-roboto font-extrabold text-lg mode-items ">
           <SiTask className="inline mr-1" />

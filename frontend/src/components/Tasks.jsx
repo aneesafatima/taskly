@@ -14,7 +14,7 @@ function Tasks({ tasks }) {
   });
  
   return (
-    <section className="tasks w-[680px] px-2 cursor-default ">
+    <section className="tasks w-[680px] px-2 cursor-default mx-2">
       <h2 className="font-lato font-bold text-3xl mode-items m-6">
         Tackle Today, Triumph Tomorrow.
       </h2>
