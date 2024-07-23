@@ -40,6 +40,6 @@ body{
 .text-white {
   color: white;
 }
-.task-form input::placeholder{
+/* .task-form input[type="date"]::placeholder{
   color: #2c2c2c;
-}
+} */

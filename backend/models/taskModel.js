@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
+const ErrorHandler = require("../utils/ErrorHandler");
 
 const taskSchema = new mongoose.Schema({
   title: {
@@ -11,15 +11,7 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     required: [true, "A task must have a start date"],
   },
-  dueDate: {
-    type: Date,
-    validate: {
-      validator: function (value) {
-        return value >= this.startDate;
-      },
-      message: "Due Date must be greater than start date",
-    },
-  },
+  dueDate: Date,
   priority: {
     type: String,
     enum: ["low", "medium", "high"],
@@ -35,6 +27,10 @@ const taskSchema = new mongoose.Schema({
   },
   lastUpdated: {
     type: Date,
+    default: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      hour12: true,
+    }),
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -43,17 +39,35 @@ const taskSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   startTime: Date,
-  endType: Date
+  endType: Date,
 });
 
 //Middleware to set the lastUpdated automatically the first time
+
+
 taskSchema.pre("save", function (next) {
- this.lastUpdated = new Date();
+  if (!(this.dueDate >= this.startDate))
+    return next(
+      new ErrorHandler("Due date must be greater than Start date", 400)
+    );
   next();
 });
+
+taskSchema.pre("findOneAndUpdate", async function (next) {
+ this.getUpdate().lastUpdated = new Date();
+  if (!(this.getUpdate().dueDate >= this.getUpdate().startDate))
+    return next(
+      new ErrorHandler("Due date must be greater than Start date", 400)
+    );``
+  next();
+});
+
+
+
+
 const Task = new mongoose.model("Tasks", taskSchema);
 
 module.exports = Task;

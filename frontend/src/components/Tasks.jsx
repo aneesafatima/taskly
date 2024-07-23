@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import TaskCard from "./TaskCard";
+import { GlobalState } from "../context/GlobalState";
 
-
-function Tasks({ tasks }) {
+function Tasks() {
+  const { tasks } = useContext(GlobalState);
+  console.log("Hello from tasks");
   console.log(tasks);
   let todo = [];
   let progress = [];
@@ -12,7 +14,7 @@ function Tasks({ tasks }) {
     else if (el.status === "progress") progress.push(el);
     else completed.push(el);
   });
- 
+
   return (
     <section className="tasks w-[680px] px-2 cursor-default mx-2">
       <h2 className="font-lato font-bold text-3xl mode-items m-6">
@@ -24,7 +26,9 @@ function Tasks({ tasks }) {
             To do(5)
           </div>
           <ul className="todo-list mt-2 space-y-2">
-           {todo.map(el => <TaskCard task={el}/>)}
+            {todo.map((el) => (
+              <TaskCard task={el} />
+            ))}
           </ul>
         </div>
         <div className=" w-1/3  p-1 rounded-xl border-[1.5px] border-border-color border-dashed">
@@ -32,7 +36,9 @@ function Tasks({ tasks }) {
             Progress(3)
           </div>
           <ul className="progress-list mt-2 space-y-2">
-          {progress.map(el => <TaskCard task={el}/>)}
+            {progress.map((el) => (
+              <TaskCard task={el} />
+            ))}
           </ul>
         </div>
         <div className="w-1/3 p-1 rounded-xl border-[1.5px] border-border-color border-dashed">
@@ -40,7 +46,9 @@ function Tasks({ tasks }) {
             Completed(1)
           </div>
           <ul className="completed-list mt-2 space-y-2">
-          {completed.map(el => <TaskCard task={el}/>)}
+            {completed.map((el) => (
+              <TaskCard task={el} />
+            ))}
           </ul>
         </div>
       </div>
@@ -49,4 +57,3 @@ function Tasks({ tasks }) {
 }
 
 export default Tasks;
-

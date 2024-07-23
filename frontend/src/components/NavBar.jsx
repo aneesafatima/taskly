@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TbLayout2Filled } from "react-icons/tb";
 import { IoIosSettings } from "react-icons/io";
 import { MdLightMode } from "react-icons/md";
 import { MdDarkMode } from "react-icons/md";
 import { SiTask } from "react-icons/si";
+import { GlobalState } from "../context/GlobalState";
 
-function NavBar({ user, mode, setMode }) {
+function NavBar() {
+  const {user, mode, setMode} = useContext(GlobalState)
  
   useEffect(() => {
     setTimeout(() => {

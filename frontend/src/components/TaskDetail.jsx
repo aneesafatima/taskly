@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TaskForm from "./TaskForm";
+import { GlobalState } from "../context/GlobalState";
 
-function TaskDetail({ addTask, setAddTask }) {
+function TaskDetail() {
+  const {addTask, setAddTask} = useContext(GlobalState)
   return (
     <div className="flex-grow h-screen bg-nav-color ">
       {!addTask && (

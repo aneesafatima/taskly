@@ -1,8 +1,7 @@
 const Task = require("../models/taskModel");
-const  catchAsync  = require( "../utils/catchAsync" );
+const catchAsync = require("../utils/catchAsync");
 
 exports.getAllTasks = catchAsync(async (req, res, next) => {
-  const tasks = await Task.find();
   res.status(200).json({
     status: "success",
     tasks,
@@ -25,10 +24,14 @@ exports.deleteTask = catchAsync(async (req, res, next) => {
 
 exports.updateTask = catchAsync(async (req, res, next) => {
   //filter tasks so only certain fields can be updated
-  const updatedTask = await Task.findByIdAndUpdate(req.params.taskId, req.body, {
-    runValidators: true,
-    new: true,
-  });
+  const updatedTask = await Task.findByIdAndUpdate(
+    req.params.taskId,
+    req.body,
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
   res.status(200).json({
     status: "success",
     task: updatedTask,
