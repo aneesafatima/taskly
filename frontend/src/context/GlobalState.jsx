@@ -8,7 +8,7 @@ export function GlobalProvider({ children }) {
   const [user, setUser] = useState("");
   const [tasks, setTasks] = useState([]);
   const [addTask, setAddTask] = useState(false);
-  const [currentTask, setCurrentTask] = useState("");
+  const [currentTask, setCurrentTask] = useState();
   const [mode, setMode] = useState("light");
 
   return (

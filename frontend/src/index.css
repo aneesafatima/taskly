@@ -43,3 +43,18 @@ body{
 /* .task-form input[type="date"]::placeholder{
   color: #2c2c2c;
 } */
+
+.task-form select{
+  -webkit-appearance: none; /* Chrome, Safari */
+  -moz-appearance: none; /* Firefox */
+  appearance: none; /* Standard syntax */
+ cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator{
+  cursor: pointer;
+  background-color:var(--main-border-color);
+}
+
+
+

@@ -5,21 +5,12 @@ import axios from "axios";
 function TaskForm() {
   //starttime and tags
   //loader for done btn
-  //status and priority fix
-  //last updated
-  //add cursor
 
   const { mode, currentTask, setAddTask } = useContext(GlobalState);
 
-  const [taskDetails, setTaskDetails] = useState({
-    title: currentTask?.title,
-    description: currentTask?.description,
-    startDate: currentTask?.startDate,
-    dueDate: currentTask?.dueDate,
-    priority: currentTask?.priority,
-    status: currentTask?.status,
-    tags: currentTask?.tags,
-  });
+  const [taskDetails, setTaskDetails] = useState({});
+
+  useEffect(() => console.log(currentTask), [currentTask]);
   useEffect(
     () =>
       document.querySelectorAll(".mode-items").forEach((el) => {
@@ -28,6 +19,18 @@ function TaskForm() {
       }),
     []
   );
+
+  useEffect(() => {
+    setTaskDetails({
+      title: currentTask?.title,
+      description: currentTask?.description,
+      startDate: currentTask?.startDate,
+      dueDate: currentTask?.dueDate,
+      priority: currentTask?.priority,
+      status: currentTask?.status,
+      tags: currentTask?.tags,
+    });
+  }, [currentTask]);
 
   const handleTaskUpdation = async () => {
     try {
@@ -46,28 +49,24 @@ function TaskForm() {
   };
 
   const handleLastUpdated = () => {
-   return `last updated (${
-            currentTask
-              ? new Date(currentTask.lastUpdated).toDateString() === new Date().toDateString()
-                ? new Date(currentTask.lastUpdated).toLocaleTimeString(
-                    "en-US",
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    }
-                  )
-                : new Date(currentTask.lastUpdated).toLocaleDateString("en-US", {
-                  month: '2-digit',
-                  day: '2-digit',
-                  year:'2-digit'
-                })
-              : "now"
-          }) `
+    return `last updated (${
+      currentTask
+        ? new Date(currentTask.lastUpdated).toDateString() ===
+          new Date().toDateString()
+          ? new Date(currentTask.lastUpdated).toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })
+          : new Date(currentTask.lastUpdated).toLocaleDateString("en-US", {
+              month: "2-digit",
+              day: "2-digit",
+              year: "2-digit",
+            })
+        : "now"
+    }) `;
+  };
 
-  }
-
- 
   //clear doubt
   return (
     <div className="task-details px-3 pb-5 min-h-full overflow-y-scroll flex flex-col justify-between">
@@ -83,7 +82,7 @@ function TaskForm() {
             className="w-full h-full font-roboto py-3 px-4 border-[1px] border-border-color bg-transparent outline-none rounded-lg my-3 mode-items"
             placeholder="title"
             required
-            value={taskDetails.title}
+            value={taskDetails?.title}
             onChange={(e) =>
               setTaskDetails((prev) => ({ ...prev, title: e.target.value }))
             }
@@ -100,36 +99,73 @@ function TaskForm() {
             Status
             <select
               type="text"
-              className="w-24 outline-none border-0 bg-yellow-200 rounded-md text-sm px-3 py-1 font-normal ml-10 text-center"
+              className={`status-select w-24 outline-none border-0 ${
+                taskDetails?.status === "todo" || !currentTask
+                  ? "bg-yellow-200"
+                  : taskDetails.status === "progress"
+                  ? "bg-pink-200"
+                  : "bg-blue-200"
+              } rounded-md text-sm px-3 py-1 font-normal ml-10 text-[#2c2c2c] text-center`}
+              onChange={(e) =>
+                setTaskDetails((prev) => ({ ...prev, status: e.target.value }))
+              }
             >
-              <option value="low" className="bg-white">
+              <option value="todo" className="bg-white">
                 todo
               </option>
-              <option value="medium" className="bg-white">
+              <option
+                value="progress"
+                className="bg-white"
+                selected={currentTask?.status === "progress" ? true : false}
+              >
                 progress
               </option>
-              <option value="high" className="bg-white">
+              <option
+                value="completed"
+                className="bg-white"
+                selected={currentTask?.status === "completed" ? true : false}
+              >
                 completed
               </option>
             </select>
           </label>
 
           <label
-            htmlFor="status"
+            htmlFor="priority"
             className="text-sm text-[#626262] font-roboto font-medium"
           >
             Priority
             <select
               type="text"
-              className="w-24 outline-none border-0 text-center  bg-yellow-200 rounded-md text-sm px-3 py-1 font-normal ml-10"
+              className={`w-24 outline-none border-0 text-center text-[#2c2c2c]  ${
+                taskDetails?.priority === "low" || !currentTask
+                  ? "bg-[#a5f4b9]"
+                  : taskDetails.priority === "medium"
+                  ? "bg-[#f6d7a9]"
+                  : "bg-[#e49090]"
+              }  rounded-md text-sm px-3 py-1 font-normal ml-10`}
+              onChange={(e) =>
+                setTaskDetails((prev) => ({
+                  ...prev,
+                  priority: e.target.value,
+                }))
+              }
             >
-              <option value="low" className="bg-white">
+              <option value="low" className="bg-white ">
                 low
               </option>
-              <option value="medium" className="bg-white">
+              <option
+                value="medium"
+                className="bg-white"
+                selected={currentTask?.priority === "medium" ? true : false}
+              >
                 medium
               </option>
-              <option value="high" className="bg-white">
+              <option
+                value="high"
+                className="bg-white"
+                selected={currentTask?.priority === "high" ? true : false}
+              >
                 high
               </option>
             </select>
@@ -142,9 +178,9 @@ function TaskForm() {
             Start Date
             <input
               type="date"
-              className="w-32 outline-none border-0 bg-yellow-200 rounded-md text-sm px-3 py-1 font-normal ml-10"
+              className="w-32 outline-none bg-transparent rounded-md text-sm px-3 py-1 font-normal ml-10 border-[1px] border-border-color"
               value={
-                taskDetails.startDate
+                taskDetails?.startDate
                   ? new Date(taskDetails.startDate).toISOString().split("T")[0]
                   : ""
               }
@@ -164,9 +200,9 @@ function TaskForm() {
             Due Date
             <input
               type="date"
-              className="w-32 outline-none border-0 bg-yellow-200 rounded-md text-sm px-3 py-1 font-normal ml-10"
+              className="w-32 outline-none bg-transparent  rounded-md text-sm px-3 py-1 font-normal ml-10 border-[1px] border-border-color"
               value={
-                taskDetails.dueDate
+                taskDetails?.dueDate
                   ? new Date(taskDetails.dueDate).toISOString().split("T")[0]
                   : ""
               }
@@ -188,7 +224,7 @@ function TaskForm() {
           </label> */}
           <textarea
             type="text"
-            className="bg-transparent  min-h-fit resize-none outline-none border-0 mode-items"
+            className="bg-transparent text-[#bcbcbc] min-h-fit resize-none outline-none border-0 mode-items"
             placeholder="write description..."
             rows={1}
             value={taskDetails?.description}
@@ -203,8 +239,8 @@ function TaskForm() {
       </div>
       <div className="text-sm text-[#626262] flex justify-between items-center">
         <span className="flex items-center">
-          <CiTimer className="mr-1" />
-          {handleLastUpdated()}
+          <CiTimer className="mr-1" size={13} />
+          <span className="text-xs">{handleLastUpdated()}</span>
         </span>{" "}
         <button
           type="submit"

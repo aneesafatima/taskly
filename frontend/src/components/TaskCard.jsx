@@ -2,43 +2,6 @@ import React, { useContext } from "react";
 import { MdArrowOutward } from "react-icons/md";
 import { IoStarSharp } from "react-icons/io5";
 import { GlobalState } from "../context/GlobalState";
-/*
-0
-: 
-Status
-: 
-"to-do"
-createdAt
-: 
-"2024-07-21T15:05:02.127Z"
-dueDate
-: 
-"2023-07-25T00:00:00.000Z"
-lastUpdated
-: 
-"2024-07-21T14:22:00.219Z"
-priority
-: 
-"low"
-startDate
-: 
-"2023-07-19T00:00:00.000Z"
-tags
-: 
-(2) ['homework', 'maths']
-title
-: 
-"task 1"
-user
-: 
-"669ce0d1b2c954d6e41a104a"
-__v
-: 
-0
-_id
-: 
-"669d1988177ad84e45a664aa"
-*/
 
 function TaskCard({task}) {
  
