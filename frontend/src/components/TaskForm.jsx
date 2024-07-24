@@ -1,14 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CiTimer } from "react-icons/ci";
 import { GlobalState } from "../context/GlobalState";
+import { WithContext as ReactTags } from 'react-tag-input';
+
 import axios from "axios";
 function TaskForm() {
   //starttime and tags
   //loader for done btn
+  //add styling to the tags 
+  //fix last updated issue
+  //add option for creating a new task
 
   const { mode, currentTask, setAddTask } = useContext(GlobalState);
 
   const [taskDetails, setTaskDetails] = useState({});
+  const [tags, setTags] = useState([]);
 
   useEffect(() => console.log(currentTask), [currentTask]);
   useEffect(
@@ -28,8 +34,9 @@ function TaskForm() {
       dueDate: currentTask?.dueDate,
       priority: currentTask?.priority,
       status: currentTask?.status,
-      tags: currentTask?.tags,
-    });
+    }); 
+ 
+    setTags(currentTask?.tags)
   }, [currentTask]);
 
   const handleTaskUpdation = async () => {
@@ -66,6 +73,13 @@ function TaskForm() {
         : "now"
     }) `;
   };
+
+  const handleAddition = (tag) => {
+  setTags( prev => [...prev, tag])
+  }
+  const handleDelete = (index) => {
+ setTags(prev => prev.filter( (el, i) => i!==index))
+  }
 
   //clear doubt
   return (
@@ -211,6 +225,14 @@ function TaskForm() {
               }
             />
           </label>
+
+          <ReactTags 
+          tags={tags}
+          separators={["Enter", "Tab"]}
+          placeholder="add tags"
+          handleAddition={handleAddition}
+          handleDelete={handleDelete}
+          />
           {/* <label
             htmlFor="status"
             className="text-sm text-[#626262] font-roboto font-bold"

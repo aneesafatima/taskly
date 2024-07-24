@@ -10,6 +10,7 @@ export function GlobalProvider({ children }) {
   const [addTask, setAddTask] = useState(false);
   const [currentTask, setCurrentTask] = useState();
   const [mode, setMode] = useState("light");
+  
 
   return (
     <GlobalState.Provider

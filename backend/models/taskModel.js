@@ -22,16 +22,14 @@ const taskSchema = new mongoose.Schema({
     enum: ["todo", "progress", "completed"],
     default: "to-do",
   },
-  tags: {
-    type: [String],
-  },
-  lastUpdated: {
-    type: Date,
-    default: new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      hour12: true,
-    }),
-  },
+ tags: [
+  {
+    id: String,
+    text: String
+  }
+ ]
+ ,
+  lastUpdated: Date,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference
@@ -53,6 +51,10 @@ taskSchema.pre("save", function (next) {
     return next(
       new ErrorHandler("Due date must be greater than Start date", 400)
     );
+    this.lastUpdated = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      hour12: true,
+    })
   next();
 });
 
