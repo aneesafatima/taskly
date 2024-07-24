@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CiTimer } from "react-icons/ci";
 import { GlobalState } from "../context/GlobalState";
-import { WithContext as ReactTags } from 'react-tag-input';
-
+import { WithContext as ReactTags } from "react-tag-input";
 import axios from "axios";
 function TaskForm() {
-  //starttime and tags
+  //starttime
   //loader for done btn
-  //add styling to the tags 
-  //fix last updated issue
+  //add styling to the tags
+ //fix due date while creating task
+ //fix calender icon color
+ //fix description color
   //add option for creating a new task
+  //use refetch for updation or creation of new data
 
   const { mode, currentTask, setAddTask } = useContext(GlobalState);
 
@@ -34,19 +36,20 @@ function TaskForm() {
       dueDate: currentTask?.dueDate,
       priority: currentTask?.priority,
       status: currentTask?.status,
-    }); 
- 
-    setTags(currentTask?.tags)
+    });
+
+    setTags(currentTask?.tags);
   }, [currentTask]);
 
   const handleTaskUpdation = async () => {
     try {
+      console.log(taskDetails);
       const res = await axios({
         url: currentTask
           ? `http://localhost:3000/api/tasks/${currentTask._id}`
           : "http://localhost:3000/api/tasks/",
         method: currentTask ? "PATCH" : "POST",
-        data: taskDetails,
+        data: { ...taskDetails, tags },
         withCredentials: true,
       });
       if (res.data?.status === "success") setAddTask(false);
@@ -75,11 +78,14 @@ function TaskForm() {
   };
 
   const handleAddition = (tag) => {
-  setTags( prev => [...prev, tag])
-  }
+    setTags((prev) => {
+      if (prev) return [...prev, tag];
+      else return [tag];
+    });
+  };
   const handleDelete = (index) => {
- setTags(prev => prev.filter( (el, i) => i!==index))
-  }
+    setTags((prev) => prev?.filter((el, i) => i !== index));
+  };
 
   //clear doubt
   return (
@@ -226,12 +232,13 @@ function TaskForm() {
             />
           </label>
 
-          <ReactTags 
-          tags={tags}
-          separators={["Enter", "Tab"]}
-          placeholder="add tags"
-          handleAddition={handleAddition}
-          handleDelete={handleDelete}
+          <ReactTags
+            tags={tags}
+            separators={["Enter", "Tab"]}
+            placeholder="add tags"
+            handleAddition={handleAddition}
+            handleDelete={handleDelete}
+            editable
           />
           {/* <label
             htmlFor="status"

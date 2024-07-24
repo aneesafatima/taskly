@@ -20,16 +20,15 @@ const taskSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["todo", "progress", "completed"],
-    default: "to-do",
+    default: "todo",
   },
- tags: [
-  {
-    id: String,
-    text: String
-  }
- ]
- ,
-  lastUpdated: Date,
+  tags: [
+    {
+      id: String,
+      text: String,
+    },
+  ],
+  lastUpdated: { type: Date, default: new Date() },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference
@@ -45,30 +44,25 @@ const taskSchema = new mongoose.Schema({
 
 //Middleware to set the lastUpdated automatically the first time
 
-
 taskSchema.pre("save", function (next) {
-  if (!(this.dueDate >= this.startDate))
+  if (this.dueDate && !(this.dueDate >= this.startDate))
     return next(
       new ErrorHandler("Due date must be greater than Start date", 400)
     );
-    this.lastUpdated = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      hour12: true,
-    })
+
   next();
 });
 
 taskSchema.pre("findOneAndUpdate", async function (next) {
- this.getUpdate().lastUpdated = new Date();
-  if (!(this.getUpdate().dueDate >= this.getUpdate().startDate))
+  this.getUpdate().lastUpdated = new Date();
+  const dueDate = this.getUpdate().dueDate;
+  if (dueDate && !(this.getUpdate().dueDate >= this.getUpdate().startDate))
     return next(
       new ErrorHandler("Due date must be greater than Start date", 400)
-    );``
+    );
+  
   next();
 });
-
-
-
 
 const Task = new mongoose.model("Tasks", taskSchema);
 

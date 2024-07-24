@@ -11,7 +11,7 @@ exports.createTask = catchAsync(async (req, res, next) => {
   req.body.user = req.user.id;
   const newTask = await Task.create(req.body);
   res.status(201).json({
-    statsu: "success",
+    status: "success",
     task: newTask,
   });
 });
