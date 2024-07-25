@@ -10,6 +10,7 @@ export function GlobalProvider({ children }) {
   const [addTask, setAddTask] = useState(false);
   const [currentTask, setCurrentTask] = useState();
   const [mode, setMode] = useState("light");
+  const [refetch, setRefetch] = useState(true);
   
 
   return (
@@ -29,6 +30,8 @@ export function GlobalProvider({ children }) {
         setCurrentTask,
         mode,
         setMode,
+        refetch,
+        setRefetch
       }}
     >
       {children}

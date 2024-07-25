@@ -80,10 +80,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-family: lato, "sans-serif";
   background-color: transparent;
   color: var(--tags-color);
+
 }
 .ReactTags__remove {
   width: 5px;
   height: 10px;
   margin: 8px;
   width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar{
+  width: 0px;
+}
+.ReactTags__error svg{
+  display: inline;
+  width: 8px;
+  margin-right:4px ;
+}
+.ReactTags__error{
+  font-size: 10px;
+  font-family: lato, "sans-serif";
+  display: flex;
+  align-items: center;
+  color: var(--tags-color);
 }

@@ -20,8 +20,8 @@ function Tasks() {
       <h2 className="font-lato font-bold text-3xl mode-items m-6">
         Tackle Today, Triumph Tomorrow.
       </h2>
-      <div className="flex min-h-[85vh] space-x-2">
-        <div className="w-1/3   p-1 rounded-xl border-[1.5px] border-border-color border-dashed">
+      <div className="flex h-[85vh]  space-x-2">
+        <div className="w-1/3 h-full overflow-y-scroll  scrollbar  p-1 rounded-xl border-[1.5px] border-border-color border-dashed">
           <div className="w-full h-10 bg-to-do-gradient rounded-xl text-[16px] font-roboto font-medium text-white text-center leading-10">
             To do(5)
           </div>

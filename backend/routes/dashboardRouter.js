@@ -1,8 +1,8 @@
 const express = require("express");
 const { protect } = require("../controllers/authController");
-const { getDashboardData } = require("../controllers/dashboardController");
+const { getAllTasks } = require("../controllers/taskController");
 const dashboardRouter = express.Router();
 
-dashboardRouter.get("/", protect, getDashboardData);
+dashboardRouter.get("/", protect, getAllTasks);
 
 module.exports = dashboardRouter;

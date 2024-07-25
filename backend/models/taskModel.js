@@ -37,9 +37,7 @@ const taskSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
-  },
-  startTime: Date,
-  endType: Date,
+  }
 });
 
 //Middleware to set the lastUpdated automatically the first time
