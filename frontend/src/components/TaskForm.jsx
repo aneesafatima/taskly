@@ -3,14 +3,17 @@ import { CiTimer } from "react-icons/ci";
 import { GlobalState } from "../context/GlobalState";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
+import DatePicker from "react-datepicker";
 import { WithContext as ReactTags } from "react-tag-input";
+import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for DatePicker
+
 import axios from "axios";
 function TaskForm() {
   //starttime
   //loader for done btn
   //add styling to the tags
-  //fix calender icon color
-  //fix description color
+  //refactor
+
 
   const { mode, currentTask, setAddTask, setRefetch } = useContext(GlobalState);
 
@@ -55,7 +58,7 @@ function TaskForm() {
       console.log(err);
     }
   };
-    const handleTaskDeletion = async () => {
+  const handleTaskDeletion = async () => {
     console.log("entered delete function");
     try {
       const res = await axios({
@@ -101,14 +104,16 @@ function TaskForm() {
     setTags((prev) => prev?.filter((el, i) => i !== index));
   };
 
-
-
   //clear doubt
   return (
     <div className="task-details px-3 pb-5 h-full overflow-y-scroll scrollbar flex flex-col justify-between">
       <div>
         <h1 className="font-roboto font-medium text-xl pl-6 p-4 flex justify-between items-center  text-[#2c2c2c] mode-items ">
-          Task Overview <MdOutlineCancel className="inline cursor-pointer" onClick={() => setAddTask(false)}/>
+          Task Overview{" "}
+          <MdOutlineCancel
+            className="inline cursor-pointer"
+            onClick={() => setAddTask(false)}
+          />
         </h1>
 
         <form className="task-form flex flex-col space-y-3">
@@ -211,19 +216,18 @@ function TaskForm() {
             htmlFor="start date"
             className="text-sm text-[#626262] font-roboto font-medium"
           >
-            Start Date
-            <input
-              type="date"
-              className="w-32 outline-none bg-transparent rounded-md text-sm px-3 py-1 font-normal ml-10 border-[1px] border-border-color"
-              value={
+            <span className="mr-10">Start Date</span>
+            <DatePicker
+              showIcon
+              selected={
                 taskDetails.startDate
                   ? new Date(taskDetails.startDate).toISOString().split("T")[0]
                   : null
               }
-              onChange={(e) =>
+              onChange={(date) =>
                 setTaskDetails((prev) => ({
                   ...prev,
-                  startDate: e.target.value,
+                  startDate: date,
                 }))
               }
             />
@@ -233,23 +237,24 @@ function TaskForm() {
             htmlFor="due date"
             className="text-sm text-[#626262] font-roboto font-medium"
           >
-            Due Date
-            <input
-              type="date"
-              className="w-32 outline-none bg-transparent  rounded-md text-sm px-3 py-1 font-normal ml-10 border-[1px] border-border-color"
-              value={
+         
+            <span className="mr-10">Due Date</span>
+            <DatePicker
+              showIcon
+              selected={
                 taskDetails.dueDate
                   ? new Date(taskDetails.dueDate).toISOString().split("T")[0]
                   : null
               }
-              onChange={(e) =>
-                setTaskDetails((prev) => ({ ...prev, dueDate: e.target.value }))
+              onChange={(date) =>
+                setTaskDetails((prev) => ({
+                  ...prev,
+                  dueDate: date,
+                }))
               }
             />
           </label>
-          {/* <label htmlFor="start">
-            <input type="time" />
-          </label> */}
+       
 
           <ReactTags
             tags={tags}
@@ -262,7 +267,7 @@ function TaskForm() {
 
           <textarea
             type="text"
-            className="bg-transparent text-[#bcbcbc] min-h-fit resize-none outline-none border-0 mode-items"
+            className="bg-transparent  min-h-fit resize-none outline-none border-0 mode-items"
             placeholder="write description..."
             rows={6}
             value={taskDetails?.description}
@@ -273,7 +278,6 @@ function TaskForm() {
               }))
             }
           />
-          
         </form>
       </div>
       <div className="text-sm text-[#626262] flex justify-between items-center">
@@ -282,19 +286,20 @@ function TaskForm() {
           <span className="text-xs">{handleLastUpdated()}</span>
         </span>
         <div className="flex">
-        {currentTask && (
+          {currentTask && (
             <MdDeleteOutline
               className="m-2 text-[#626262] cursor-pointer"
               onClick={handleTaskDeletion}
+              size={20}
             />
           )}
-        <button
-          type="submit"
-          className="h-8 w-20 text-xs rounded-lg  bg-blue-800 text-[#f2f2f2] hover:bg-blue-900 leading-8 text-center font-medium"
-          onClick={handleTaskUpdation}
-        >
-          Done
-        </button>
+          <button
+            type="submit"
+            className="h-8 w-20 text-xs rounded-lg  bg-blue-800 text-[#f2f2f2] hover:bg-blue-900 leading-8 text-center font-medium"
+            onClick={handleTaskUpdation}
+          >
+            Done
+          </button>
         </div>
       </div>
     </div>

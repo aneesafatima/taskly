@@ -4,7 +4,7 @@ import { NavBar, TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
-
+//add loader
   const {
     giveAccess,
     seTGiveAccess,

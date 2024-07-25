@@ -55,7 +55,10 @@ body {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  background-color: var(--main-border-color);
+
+}
+input[type="text"]{
+  color: var(--tags-color);
 }
 .ReactTags__tag {
   background-color: var(--tags-bg);
@@ -103,4 +106,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   color: var(--tags-color);
+}
+.react-datepicker__input-container svg{
+  fill:var(--tags-color) ;
+  width: 10px;
+  
+}
+.react-datepicker__input-container input{
+width: 128px;
+outline: none;
+background: transparent;
+border-radius: 6px;
+font-size: 14px;
+font-family: lato, "sans-serif";
+color: var(--tags-color);
+font-weight: normal;
+
+border: 1px solid var(--main-border-color);
+
+}
+
+/* w-32 outline-none bg-transparent  rounded-md text-sm px-3 py-1 font-normal ml-10 border-[1px] border-border-color */
+.react-datepicker__input-container input::placeholder{
+  /* color: var(--tags-bg); */
 }
