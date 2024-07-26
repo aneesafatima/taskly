@@ -5,15 +5,18 @@ import { MdLightMode } from "react-icons/md";
 import { MdDarkMode } from "react-icons/md";
 import { SiTask } from "react-icons/si";
 import { GlobalState } from "../context/GlobalState";
+import { Link } from "react-router-dom";
 
-function NavBar() {
-  const {user, mode, setMode} = useContext(GlobalState)
- 
+function NavBar({active}) {
+  
+  const { user, mode, setMode } = useContext(GlobalState);
+
   useEffect(() => {
     setTimeout(() => {
-      document.querySelector(".nav-bar").style.transform = "translate(0)"
-    }, 100)
-  }, [])
+      document.querySelector(".nav-bar").style.transform = "translate(0)";
+    }, 100);
+  }, []);
+
   const handleToggleMode = () => {
     setMode((prev) => (prev === "light" ? "dark" : "light"));
     document.body.classList.toggle("darkmode");
@@ -21,6 +24,26 @@ function NavBar() {
       .querySelectorAll(".mode-items")
       .forEach((el) => el.classList.toggle("text-white"));
   };
+
+  // const handleNavItem = (e) => {
+  //   const items = [...document.querySelector(".nav-list").children];
+  //   const children = items.map(el => el.children)
+  
+   
+  //   console.log("entered nav controller")
+  //   children.forEach((navItem) => {
+  //     console.log(navItem)
+  //     const childEls = navItem.querySelectorAll("span");
+  //     console.log(childEls)
+  //     if (navItem === e.currentTarget) {
+  //       childEls[0].classList.add("active-text");
+  //       childEls[1].classList.add("active-tag");
+  //     } else {
+  //       childEls[0].classList.remove("active-text");
+  //       childEls[1].classList.remove("active-tag");
+  //     }
+  //   });
+  // };
   return (
     <nav className="nav-bar w-52 bg-nav-color h-screen cursor-default pt-4 relative -translate-x-full transition-all duration-1000">
       <div className=" mb-5 pl-3">
@@ -42,15 +65,33 @@ function NavBar() {
         </div>
       </div>
       <span className="text-[#767575]  font-roboto text-sm pl-4 ">Menu</span>
-      <ul className=" text-sm mt-5 space-y-7 text-[#767575] font-roboto pl-6">
-        <li className="flex cursor-pointer">
-          <TbLayout2Filled className="inline mr-3" size={20} />
-          Overview
-        </li>
-        <li className="flex items-center cursor-pointer">
-          <IoIosSettings className="inline mr-3 -ml-[2px]" size={24} />
-          Settings
-        </li>
+      <ul className="nav-list text-sm mt-5  text-[#767575] font-roboto pl-6">
+        <Link to="/dashboard">
+          <li
+            className="h-10 flex items-center justify-between cursor-pointer my-5 "
+            // onClick={handleNavItem}
+          >
+            <span className={active==="/dashboard" ? "active-text" : ""}>
+              
+              <TbLayout2Filled className="inline mr-3" size={20} />
+              Overview
+            </span>
+            <span className={active==="/dashboard" ? "active-tag" : ""}></span>
+          </li>
+        </Link>
+        <Link to="/settings">
+          <li
+            className="h-10 flex items-center  justify-between cursor-pointer "
+            // onClick={handleNavItem}
+          >
+            <span className={active==="/settings" ? "active-text" : ""}>
+         
+              <IoIosSettings className="inline mr-3 -ml-[2px]" size={24} />
+              Settings
+            </span>
+            <span className={active==="/settings" ? "active-tag" : ""}></span>
+          </li>
+        </Link>
       </ul>
 
       <div className="cursor-pointer absolute bottom-6 pl-3">

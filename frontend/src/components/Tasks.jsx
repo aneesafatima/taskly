@@ -4,8 +4,6 @@ import { GlobalState } from "../context/GlobalState";
 
 function Tasks() {
   const { tasks } = useContext(GlobalState);
-  console.log("Hello from tasks");
-  console.log(tasks);
   let todo = [];
   let progress = [];
   let completed = [];

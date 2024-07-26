@@ -10,23 +10,16 @@ import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for DateP
 import axios from "axios";
 function TaskForm() {
   //starttime
-  //loader for done btn
-  //add styling to the tags
   //refactor
 
-
-  const { mode, currentTask, setAddTask, setRefetch } = useContext(GlobalState);
+ 
+  const {  currentTask, setAddTask, setRefetch, setCurrentTask } =
+    useContext(GlobalState);
 
   const [taskDetails, setTaskDetails] = useState({});
   const [tags, setTags] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
 
-  useEffect(() => console.log(currentTask), [currentTask]);
-  useEffect(() =>
-    document.querySelectorAll(".mode-items").forEach((el) => {
-      if (mode === "dark") el.classList.add("text-white");
-      else el.classList.remove("text-white");
-    })
-  );
 
   useEffect(() => {
     setTaskDetails({
@@ -40,39 +33,57 @@ function TaskForm() {
     setTags(currentTask?.tags);
   }, [currentTask]);
 
-  const handleTaskUpdation = async () => {
-    try {
-      const res = await axios({
-        url: currentTask
-          ? `http://localhost:3000/api/tasks/${currentTask._id}`
-          : "http://localhost:3000/api/tasks/",
-        method: currentTask ? "PATCH" : "POST",
-        data: { ...taskDetails, tags },
-        withCredentials: true,
-      });
-      if (res.data?.status === "success") {
-        setAddTask(false);
-        setRefetch(true);
-      }
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    if (showLoader) {
+      const btn = document.querySelector(".form-submit-btn");
+      btn.innerHTML = `<span class="loader"></span>`;
     }
+  }, [showLoader]);
+
+  const handleTaskUpdation = () => {
+    setShowLoader(true);
+    setTimeout(async () => {
+      try {
+        const res = await axios({
+          url: currentTask
+            ? `http://localhost:3000/api/tasks/${currentTask._id}`
+            : "http://localhost:3000/api/tasks/",
+          method: currentTask ? "PATCH" : "POST",
+          data: { ...taskDetails, tags },
+          withCredentials: true,
+        });
+        if (res.data?.status === "success") {
+          setShowLoader(false);
+          setAddTask(false);
+          setRefetch(true);
+          setCurrentTask("")
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }, 500);
   };
-  const handleTaskDeletion = async () => {
-    console.log("entered delete function");
-    try {
-      const res = await axios({
-        url: `http://localhost:3000/api/tasks/${currentTask._id}`,
-        method: "DELETE",
-        withCredentials: true,
-      });
-      if (res.data?.status === "success") {
-        setRefetch(true);
-        setAddTask(false);
+
+  const handleTaskDeletion = () => {
+    setShowLoader(true);
+    setTimeout(async () => {
+      try {
+        const res = await axios({
+          url: `http://localhost:3000/api/tasks/${currentTask._id}`,
+          method: "DELETE",
+          withCredentials: true,
+        });
+
+        if (res.data?.status === "success") {
+          setRefetch(true);
+          setAddTask(false);
+          setShowLoader(false);
+          setCurrentTask("")
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    }, 500);
   };
 
   const handleLastUpdated = () => {
@@ -237,7 +248,6 @@ function TaskForm() {
             htmlFor="due date"
             className="text-sm text-[#626262] font-roboto font-medium"
           >
-         
             <span className="mr-10">Due Date</span>
             <DatePicker
               showIcon
@@ -254,7 +264,6 @@ function TaskForm() {
               }
             />
           </label>
-       
 
           <ReactTags
             tags={tags}
@@ -263,6 +272,7 @@ function TaskForm() {
             handleAddition={handleAddition}
             handleDelete={handleDelete}
             maxTags={4}
+            allowDragDrop={false}
           />
 
           <textarea
@@ -295,7 +305,7 @@ function TaskForm() {
           )}
           <button
             type="submit"
-            className="h-8 w-20 text-xs rounded-lg  bg-blue-800 text-[#f2f2f2] hover:bg-blue-900 leading-8 text-center font-medium"
+            className="form-submit-btn h-8 w-20 text-xs rounded-lg flex items-center justify-center bg-blue-800 text-[#f2f2f2] hover:bg-blue-900  text-center font-medium"
             onClick={handleTaskUpdation}
           >
             Done

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import { NavBar, TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
@@ -41,8 +42,8 @@ function dashboard() {
   if (!giveAccess) return <div>{errMessage}</div>;
   return (
     giveAccess && (
-      <div className="flex">
-        <NavBar />
+      <div className="flex flex-grow">
+         
         <Tasks />
         <TaskDetail />
       </div>

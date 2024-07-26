@@ -107,6 +107,13 @@ input[type="text"]{
   align-items: center;
   color: var(--tags-color);
 }
+.ReactTags__remove{
+
+}
+.ReactTags__remove svg{
+width: 8px;
+
+}
 .react-datepicker__input-container svg{
   fill:var(--tags-color) ;
   width: 10px;
@@ -121,12 +128,43 @@ font-size: 14px;
 font-family: lato, "sans-serif";
 color: var(--tags-color);
 font-weight: normal;
-
 border: 1px solid var(--main-border-color);
-
 }
 
-/* w-32 outline-none bg-transparent  rounded-md text-sm px-3 py-1 font-normal ml-10 border-[1px] border-border-color */
+
 .react-datepicker__input-container input::placeholder{
   /* color: var(--tags-bg); */
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+  line-height: 32px;
+  border: 2px solid #FFF;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  }
+
+  @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+
+span.active-tag{
+width: 12px;
+height: 100%;
+background-color: #2563eb;
+border-start-start-radius: 0.375rem /* 6px */;
+border-end-start-radius: 0.375rem /* 6px */;
+
+}
+.active-text{
+  color: var(--tags-color);
 }
