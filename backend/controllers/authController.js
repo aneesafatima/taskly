@@ -30,6 +30,17 @@ const createSendToken = (id) => {
   });
 };
 
+//data = ["name", "email", "status"]
+
+const filterObject = (req, ...data) => {
+  const filteredObject = {};
+  data.forEach((el) => {
+    if (data.includes(el)) {
+      filteredObject[el] = req[el];
+    }
+  });
+  return filteredObject;
+};
 exports.signUp = catchAsync(async (req, res, next) => {
   const user = await User.create({
     name: req.body.name,
@@ -44,8 +55,8 @@ exports.logIn = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password)
     return next(new ErrorHandler("Please enter email or password", 401));
-  const user = await User.findOne({ email }).select('+password')
-  if (!user || !await user.comparePasswords(password, user.password))
+  const user = await User.findOne({ email }).select("+password");
+  if (!user || !(await user.comparePasswords(password, user.password)))
     return next(new ErrorHandler("Invalid email or password", 401));
   sendToken(user, 200, res);
 });
@@ -66,9 +77,17 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
   const currentUser = await User.findOne({ _id: decoded.id });
+
   if (!currentUser)
     return next(new ErrorHandler("There is no user belonging to this Id", 400));
+
+  //check if token was issued before the password was changed
+
+  if (currentUser.passwordChangedAfter(decoded.iat))
+    return next(new ErrorHandler("Your password was changed recently", 400));
+
   req.user = currentUser;
 
   //promisify returns a promise based version of the jwt.verify function which we are immediatedly calling in the next step
@@ -76,4 +95,48 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.logOut = (req, res) => {};
+exports.updateMyPassword = catchAsync(async (req, res, next) => {
+  const { password, passwordConfirm, newPassword } = req.body;
+  const user = await User.findOne({ _id: req.user._id }).select("+password");
+  console.log(user);
+  if (
+    password !== passwordConfirm ||
+    !user.comparePasswords(password, user.password)
+  )
+    return next(new ErrorHandler("Invalid password", 401));
+  //add a middleware to set a passwordChangedAt date
+  user.password = newPassword;
+  user.passwordConfirm = newPassword;
+  await user.save(); //validators for all the fields are run
+
+  sendToken(user, 200, res);
+});
+exports.updateMe = catchAsync(async (req, res, next) => {
+  const filteredObject = filterObject(req.body, "name", "email", "status");
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    filteredObject,
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
+
+ res.status(200).json({
+  status: "success", 
+  updatedUser
+ })
+});
+
+exports.logOut = (req, res) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(
+      Date.now() + 10*1000
+    ), //this property expects a date object
+    secure: process.env.NODE_ENV === "development" ? false : true,
+    path: "/",
+    //only when in dev mode send the cookie over http otherwise https
+    httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
+  });
+};

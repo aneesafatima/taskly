@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "A user must have a name"]
+    required: [true, "A user must have a name"],
   },
   email: {
     type: String,
@@ -13,12 +13,16 @@ const UserSchema = new mongoose.Schema({
     required: [true, "A user must have an email"],
     validate: [validator.isEmail, "Please provide a valid email"],
   },
+  status: {
+    type: String,
+    default: "none"
+  },
 
   password: {
     type: String,
     required: [true, "A user must have a password"],
     minLength: 8,
-    select: false
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -30,6 +34,7 @@ const UserSchema = new mongoose.Schema({
       message: "Passwords do not match",
     },
   },
+  passwordChangedAt: Date,
 });
 
 UserSchema.pre("save", async function (next) {
@@ -40,15 +45,29 @@ UserSchema.pre("save", async function (next) {
   }
   next();
 });
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+  this.passwordChangedAt = new Date(Date.now() - 1000);
+  console.log(this.passwordChangedAt);
+  next();
+});
 
 UserSchema.methods.comparePasswords = async function (
   userPassword,
   hashedPassword
 ) {
-  console.log(userPassword, hashedPassword);
   return await bcrypt.compare(userPassword, hashedPassword);
 };
 
+UserSchema.methods.passwordChangedAfter =   function (jwtTimeStamp) {
+  if (this.passwordChangedAt) {
+    const passwordTime = this.passwordChangedAt.getTime();
+    console.log(passwordTime/1000)
+    return (passwordTime / 1000) > jwtTimeStamp;
+  }
+  return false;
+};
+//check mistake 
 const User = new mongoose.model("Users", UserSchema);
 
 module.exports = User;
