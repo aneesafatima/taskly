@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import coverPng from "/assets/taskly-cover.png";
@@ -9,35 +9,38 @@ import { MdCancel } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import { PiPasswordLight } from "react-icons/pi";
 import { SiTask } from "react-icons/si";
+import { HiUserCircle } from "react-icons/hi";
 
+import { GlobalState } from "../context/GlobalState";
 
 function auth() {
   //check if email actaully exists
 
   //<a href="https://www.flaticon.com/free-icons/task" title="task icons">Task icons created by AmruID - Flaticon</a>
 
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [authStatus, setAuthStatus] = useState("signup");
-  const [errMessage, setErrMessage] = useState("");
+  const {
+    authStatus,
+    setAuthStatus,
+    errMessage,
+    setErrMessage,
+    userDetails,
+    setUserDetails,
+    passwordDetails,
+    setPasswordDetails,
+  } = useContext(GlobalState);
 
   const navigate = useNavigate();
 
   const handleFormSubmission = async (e) => {
     e.preventDefault();
     try {
+      console.log(userDetails);
+      console.log(authStatus);
       const res = await axios.post(
         authStatus === "signup"
           ? "http://localhost:3000/api/users/signup"
           : "http://localhost:3000/api/users/login",
-        {
-          email,
-          password,
-          passwordConfirm,
-          name
-        },
+        { ...userDetails, ...passwordDetails },
         {
           withCredentials: true, // Include credentials in the request
         }
@@ -54,13 +57,12 @@ function auth() {
     setAuthStatus((prev) => (prev === "signup" ? "login" : "signup"));
   };
 
-  useEffect(() => console.log(authStatus), [authStatus]);
   return (
     <div className="p-3  rounded-lg flex items-center h-screen space-x-5">
       <img src={coverPng} alt="cover img" className="w-[70%] rounded-lg" />
       <div className="right-section w-full h-fit relative">
         <h1 className="font-roboto font-bold text-center w-full text-lg absolute bottom-[110%]">
-          <SiTask className="inline"/> Taskly
+          <SiTask className="inline" /> Taskly
         </h1>
 
         <h2 className="font-roboto font-light mb-2 text-lg text-center tracking-wide">
@@ -70,20 +72,24 @@ function auth() {
           className="auth-form flex flex-col space-y-5 mt-4 "
           onSubmit={handleFormSubmission}
         >
-          {authStatus === "signup" && <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
-            <CiUser size={18} color="black" className="thick-stroke" />
-            <input
-              type="name"
-              name="name"
-              className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
-              placeholder="Enter your name"
-              onChange={(e) => setName(e.target.value)}
-              title="A name is required"
-              required
-            />
-            <FaCircleCheck fill="green" className="check " />
-            <MdCancel size={17} fill="red" className="cross " />
-          </div>}
+          {authStatus === "signup" && (
+            <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
+              <CiUser size={18} color="black" className="thick-stroke" />
+              <input
+                type="name"
+                name="name"
+                className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
+                placeholder="Enter your name"
+                onChange={(e) =>
+                  setUserDetails((prev) => ({ ...prev, name: e.target.value }))
+                }
+                title="A name is required"
+                required
+              />
+              <FaCircleCheck fill="green" className="check " />
+              <MdCancel size={17} fill="red" className="cross " />
+            </div>
+          )}
           <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
             <IoMailOutline size={18} color="black" />
             <input
@@ -91,7 +97,9 @@ function auth() {
               name="email"
               className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
               placeholder="Enter your email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setUserDetails((prev) => ({ ...prev, email: e.target.value }))
+              }
               required
             />
             <FaCircleCheck fill="green" className="check " />
@@ -105,7 +113,12 @@ function auth() {
               name="password"
               placeholder="Enter your password"
               minLength={8}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPasswordDetails((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }))
+              }
               className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
               required
             />
@@ -121,8 +134,13 @@ function auth() {
                 className="w-full h-full font-roboto p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
                 placeholder="Confirm your password"
                 minLength={8}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-                pattern={password}
+                onChange={(e) =>
+                  setPasswordDetails((prev) => ({
+                    ...prev,
+                    passwordConfirm: e.target.value,
+                  }))
+                }
+                pattern={passwordDetails.password}
                 title="Passwords do not match."
                 required
               />

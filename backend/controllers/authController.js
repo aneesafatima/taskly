@@ -98,10 +98,10 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.updateMyPassword = catchAsync(async (req, res, next) => {
   const { password, passwordConfirm, newPassword } = req.body;
   const user = await User.findOne({ _id: req.user._id }).select("+password");
-  console.log(user);
+
   if (
     password !== passwordConfirm ||
-    !user.comparePasswords(password, user.password)
+    !await user.comparePasswords(password, user.password)
   )
     return next(new ErrorHandler("Invalid password", 401));
   //add a middleware to set a passwordChangedAt date

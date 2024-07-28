@@ -23,7 +23,7 @@
 .auth-form input:invalid ~ .check {
   display: none;
 }
-.form-item input:placeholder-shown ~ .cross {
+.form-item input:placeholder-shown ~ .cross, .form-item input:placeholder-shown ~ .check {
   display: none !important;
 }
 
@@ -32,7 +32,7 @@ body {
   transition: all 0.5s linear;
 }
 
-.darkmode {
+.darkmode { 
   --main-nav-color: #1c1d1d81;
   --main-bg-color: black;
   --main-border-color: #3e3d3d;
@@ -107,9 +107,7 @@ input[type="text"]{
   align-items: center;
   color: var(--tags-color);
 }
-.ReactTags__remove{
 
-}
 .ReactTags__remove svg{
 width: 8px;
 
@@ -167,4 +165,25 @@ border-end-start-radius: 0.375rem /* 6px */;
 }
 .active-text{
   color: var(--tags-color);
+}
+/* Override autofill background color */
+input:-webkit-autofill {
+  background-color: transparent !important; /* Set to your desired color */
+  box-shadow: 0 0 0px 1000px transparent inset !important; /* Remove any shadow */
+}
+
+/* Firefox */
+input:-moz-autofill {
+  background-color: transparent !important;
+}
+
+/* Safari */
+input:-webkit-autofill {
+  background-color: transparent !important;
+  border: 1px solid transparent !important; /* Adjust as needed */
+}
+
+/* Edge */
+input:-ms-input-placeholder {
+  background-color: transparent !important;
 }

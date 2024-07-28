@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
-import { NavBar, TaskDetail, Tasks } from ".";
+import {  TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
@@ -43,7 +43,6 @@ function dashboard() {
   return (
     giveAccess && (
       <div className="flex flex-grow">
-         
         <Tasks />
         <TaskDetail />
       </div>

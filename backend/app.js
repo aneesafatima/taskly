@@ -7,6 +7,7 @@ const errorController = require("./controllers/errorController");
 const app = express(); //app is an instance of express
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const settingsRouter = require("./routes/settingsRouter");
 app.use(
   cors({
     origin: "http://localhost:5173", // Allow requests from this origin
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/users", userRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/tasks", taskRouter);
+app.use("/api/settings", settingsRouter);
 app.use(errorController);
 
 module.exports = app;

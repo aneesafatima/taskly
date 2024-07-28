@@ -12,13 +12,13 @@ function TaskForm() {
   //starttime
   //refactor
 
- 
-  const {  currentTask, setAddTask, setRefetch, setCurrentTask } =
+ console.log("entered Task form")
+  const {  currentTask, setAddTask, setRefetch, setCurrentTask , showLoader, setShowLoader} =
     useContext(GlobalState);
 
   const [taskDetails, setTaskDetails] = useState({});
   const [tags, setTags] = useState([]);
-  const [showLoader, setShowLoader] = useState(false);
+  
 
 
   useEffect(() => {
@@ -34,14 +34,15 @@ function TaskForm() {
   }, [currentTask]);
 
   useEffect(() => {
-    if (showLoader) {
-      const btn = document.querySelector(".form-submit-btn");
+    console.log(showLoader)
+    if (showLoader?.status) {
+      const btn = showLoader.el;
       btn.innerHTML = `<span class="loader"></span>`;
     }
   }, [showLoader]);
 
-  const handleTaskUpdation = () => {
-    setShowLoader(true);
+  const handleTaskUpdation = (e) => {
+    setShowLoader({el : e.currentTarget, status : true});
     setTimeout(async () => {
       try {
         const res = await axios({
@@ -64,8 +65,8 @@ function TaskForm() {
     }, 500);
   };
 
-  const handleTaskDeletion = () => {
-    setShowLoader(true);
+  const handleTaskDeletion = (e) => {
+    setShowLoader({el : e.target, status: true});
     setTimeout(async () => {
       try {
         const res = await axios({

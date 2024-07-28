@@ -11,7 +11,9 @@ export default {
         "nav-color" : "var(--main-nav-color)",
         "border-color" : "var(--main-border-color)",
         "task-bg" : "var(--task-card-color)",
-        "priority-color" : "var(--priority-color)"
+        "priority-color" : "var(--priority-color",
+        "priority-color" : "var(--priority-color)",
+        "tags-color" : "var(--tags-color)",
       },
       backgroundImage: {
        "to-do-gradient" : "linear-gradient(90deg, rgba(243,227,172,1) 0%, rgba(242,186,24,1) 100%)",
