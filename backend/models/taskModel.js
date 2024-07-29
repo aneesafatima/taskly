@@ -37,7 +37,8 @@ const taskSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
-  }
+  },
+  order: Number,
 });
 
 //Middleware to set the lastUpdated automatically the first time
@@ -58,7 +59,7 @@ taskSchema.pre("findOneAndUpdate", async function (next) {
     return next(
       new ErrorHandler("Due date must be greater than Start date", 400)
     );
-  
+
   next();
 });
 

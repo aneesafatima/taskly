@@ -9,7 +9,7 @@ export function GlobalProvider({ children }) {
   const [errMessage, setErrMessage] = useState("");
   const [giveAccess, seTGiveAccess] = useState(false);
   const [user, setUser] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState();
   const [addTask, setAddTask] = useState(false);
   const [currentTask, setCurrentTask] = useState();
   const [mode, setMode] = useState("light");

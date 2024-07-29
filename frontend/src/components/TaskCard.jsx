@@ -2,9 +2,15 @@ import React, { useContext } from "react";
 import { MdArrowOutward } from "react-icons/md";
 import { IoStarSharp } from "react-icons/io5";
 import { GlobalState } from "../context/GlobalState";
+import { RiDraggable } from "react-icons/ri";
+import {useDraggable} from '@dnd-kit/core';
 
-function TaskCard({task}) {
- 
+function TaskCard({task, id}) {
+
+  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    id
+  });
+  const style = { transform: `translate3d(${transform?.x}px, ${transform?.y}px, 0)` };
   const {setAddTask, setCurrentTask} = useContext(GlobalState)
   const handlePriorityColor = () => {
     if(task.priority === "low") return "bg-[#4ead6557]"
@@ -13,7 +19,8 @@ function TaskCard({task}) {
     return "bg-[#fa888855]"
   }
   return (
-    <li className="w-full min-h-40 bg-task-bg rounded-xl p-3 flex flex-col justify-between">
+
+    <li className="w-full min-h-40 bg-task-bg rounded-xl p-3 flex flex-col justify-between" ref={setNodeRef} style={style}>
       <div className="font-lato">
         <div className="flex justify-between items-center">
           <span className={`w-24 h-6 inline-block relative  leading-6 rounded-full ${handlePriorityColor()} text-[10px]  text-center font-bold px-[1.5px]`}>
@@ -36,7 +43,7 @@ function TaskCard({task}) {
       </div>
 
       <div className="flex justify-between font-lato text-xs mode-items ">
-        <span>2am - 3am</span>
+        <RiDraggable size={15} className="cursor-grab active:cursor-grabbing" {...listeners} {...attributes}/>
         <span className="flex items-center">
           {new Date(task.createdAt).toLocaleDateString() ===
           new Date(Date.now()).toLocaleDateString() ? (

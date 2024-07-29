@@ -9,7 +9,7 @@ import { CiLock } from "react-icons/ci";
 import { PiPasswordLight } from "react-icons/pi";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { HiUserCircle } from "react-icons/hi";
-
+import { FaPerson } from "react-icons/fa6";
 function Settings() {
   //fix dark mode issue
   //fix loader in btn issue
@@ -121,7 +121,7 @@ function Settings() {
           </div>
           <div className="flex flex-col">
             <div className="form-item border-[1px] border-border-color rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm ">
-              <IoMailOutline size={18} className="text-priority-color" />
+              <FaPerson size={18} className="text-priority-color" />
               <input
                 type="text"
                 name="status"

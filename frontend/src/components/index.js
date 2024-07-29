@@ -6,3 +6,4 @@ export { default as Tasks } from "./Tasks";
 export { default as TaskCard } from "./TaskCard";
 export { default as TaskDetail } from "./TaskDetail";
 export { default as TaskForm } from "./TaskForm";
+export { default as TaskSection } from "./TaskSection";
