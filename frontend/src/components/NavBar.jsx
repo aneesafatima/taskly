@@ -11,8 +11,6 @@ import { Link } from "react-router-dom";
 function NavBar({ active }) {
   const { user, mode, setMode } = useContext(GlobalState);
 
-  console.log("Entered navbar")
-  console.log(user)
 
   const handleToggleMode = () => {
     setMode((prev) => (prev === "light" ? "dark" : "light"));

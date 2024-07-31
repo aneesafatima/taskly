@@ -6,6 +6,9 @@ import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
 //add loader
+
+
+
   const {
     giveAccess,
     seTGiveAccess,
@@ -16,6 +19,8 @@ function dashboard() {
     refetch,
     setRefetch,
   } = useContext(GlobalState);
+
+
 
   useEffect(() => {
     if (refetch) {

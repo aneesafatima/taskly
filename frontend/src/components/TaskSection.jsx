@@ -3,19 +3,24 @@ import TaskCard from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
 function TaskSection({ array, gradient, id }) {
+  
   const { setNodeRef } = useDroppable({
     id,
   });
 
   const ids = array?.map((el, i) => `${id}-${i}`);
-  console.log(ids);
+ 
+  
+
   return (
+
+    array && 
     <div
-      className="w-1/3 h-full overflow-y-scroll  scrollbar  p-1 rounded-xl border-[1.5px] border-border-color border-dashed"
+      className="w-1/3 h-full flex flex-col  p-1 rounded-xl border-[1.5px] border-border-color border-dashed"
       ref={setNodeRef}
     >
       <div
@@ -25,7 +30,7 @@ function TaskSection({ array, gradient, id }) {
         {array ? `(${array.length})` : ""}
       </div>
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-        <ul className="todo-list mt-2 space-y-2">
+        <ul className="todo-list min-h- mt-2 space-y-2 overflow-y-scroll  scrollbar flex-grow">
           {array?.map((el, i) => (
             <TaskCard task={el} id={ids[i]} />
           ))}

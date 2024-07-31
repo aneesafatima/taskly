@@ -59,7 +59,6 @@ taskSchema.pre("findOneAndUpdate", async function (next) {
     return next(
       new ErrorHandler("Due date must be greater than Start date", 400)
     );
-
   next();
 });
 

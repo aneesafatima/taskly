@@ -5,15 +5,12 @@ import { GlobalState } from "../context/GlobalState";
 function TaskDetail() {
   const { addTask, setAddTask, mode , refetch} = useContext(GlobalState);
   useEffect(() => {
-    console.log("entered useEffect")
-    console.log(addTask);
-    console.log("REFETCH")
-    console.log(refetch)
+   
       document.querySelectorAll(".mode-items").forEach((el) => {
         if (mode === "dark") el.classList.add("text-white");
         else el.classList.remove("text-white");
       });
-     console.log("done")
+   
   }, [addTask, refetch]);
 
   return (

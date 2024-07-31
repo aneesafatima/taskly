@@ -1,67 +1,71 @@
-import React, { useContext } from "react";
-
+import React, { useContext, useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { GlobalState } from "../context/GlobalState";
 import { DndContext } from "@dnd-kit/core";
-import { arrayMove } from '@dnd-kit/sortable';
-
+import { arrayMove } from "@dnd-kit/sortable";
 import TaskSection from "./TaskSection";
 
-//ACTIVE
-
-/*active
-: 
-data
-: 
-{current: undefined}
-id
-: 
-"todo-1"
-rect
-: 
-{current: {…}}*/
-
-
-//OVER
-
-/*over
-: 
-data
-: 
-{current: undefined}
-disabled
-: 
-false
-id
-: 
-"todo"
-rect
-: 
-Rect {width: 216, height: 550.7916870117188, …}*/
-
 function Tasks() {
-  let todo, progress, completed;
-  const { tasks } = useContext(GlobalState);
-  if (tasks) {
-    todo = [...tasks?.todoTasks];
-    progress = [...tasks?.progressTasks];
-    completed = [...tasks?.completedTasks]; //clear doubt
-  }
+  console.log("ENTERED TASKS");
+  // let todo, progress, completed;
+  const { tasks, setTasks } = useContext(GlobalState);
+
+  const [changeStatus, setChangeStatus] = useState(false);
+  const [todo, setTodo] = useState();
+  const [progress, setProgress] = useState();
+  const [completed, setCompleted] = useState();
+
+  useEffect(() => {
+    const arr = tasks.todoTasks.map((el) => ({
+      _id: el._id,
+    }));
+    const updateOrder = async () => {
+      try {
+        
+
+        const res = await axios.patch(
+          "http://localhost:3000/api/tasks/updateOrder",
+          { array: arr },
+          { withCredentials: true }
+        );
+        if (res.data?.status === "success") setChangeStatus(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (changeStatus) {
+      updateOrder();
+    }
+  }, [changeStatus]);
+
+  useEffect(() => {
+    setTodo(tasks?.todoTasks);
+    setProgress(tasks?.progressTasks);
+    setCompleted(tasks?.completedTasks);
+  }, [tasks]);
+
+  // if (tasks) {
+  //   todo = [...tasks?.todoTasks];
+  //   progress = [...tasks?.progressTasks];
+  //   completed = [...tasks?.completedTasks]; //clear doubt
+  // }
+
   const handleDragStart = (event) => {
-    console.log("Dragging started:", event.active.id);
+    // console.log("Dragging started:", event.active.id);
   };
   const handleDragEnd = (event) => {
-
     const { active, over } = event;
-    console.log(event)
 
-    
-    // if (active.id.split("-")[0] === over.id) {
-    //   const array = over.id === "todo" ? todo : (over.id === "progress" ? progress : completed )
-    //   const oldIndex = active.id.split("-")[1]
-    //   const items = arrayMove(array, )
-    // }
-
-   
+    if (active.id !== over.id) {
+      const activeIndex = active.data.current.sortable.index;
+      const overIndex = over.data.current.sortable.index;
+      // const array = over.id === "todo" ? todo : (over.id === "progress" ? progress : completed )
+      const updatedTasks = arrayMove(todo, activeIndex, overIndex);
+      setTasks((prev) => ({ ...prev, todoTasks: updatedTasks }));
+      setChangeStatus(true);
+      console.log("Entered handler");
+    }
   };
 
   return (
@@ -70,19 +74,21 @@ function Tasks() {
         Tackle Today, Triumph Tomorrow.
       </h2>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="flex h-[85vh]  space-x-2">
-          <TaskSection array={todo} gradient="bg-to-do-gradient" id="todo" />
-          <TaskSection
-            array={progress}
-            gradient="bg-progress-gradient"
-            id="progress"
-          />
-          <TaskSection
-            array={completed}
-            gradient="bg-completed-gradient"
-            id="completed"
-          />
-        </div>
+       
+          <div className="flex h-[85vh]  space-x-2">
+            <TaskSection array={todo} gradient="bg-to-do-gradient" id="todo" />
+            <TaskSection
+              array={progress}
+              gradient="bg-progress-gradient"
+              id="progress"
+            />
+            <TaskSection
+              array={completed}
+              gradient="bg-completed-gradient"
+              id="completed"
+            />
+          </div>
+       
       </DndContext>
     </section>
   );

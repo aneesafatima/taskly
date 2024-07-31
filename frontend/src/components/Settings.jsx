@@ -62,7 +62,7 @@ function Settings() {
         data,
         withCredentials: true,
       });
-      console.log(res)
+      
   
       if (res.data?.status === "success") {
         setUser(res.data.updatedUser)

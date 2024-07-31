@@ -12,7 +12,7 @@ function TaskForm() {
   //starttime
   //refactor
 
- console.log("entered Task form")
+ 
   const {  currentTask, setAddTask, setRefetch, setCurrentTask , showLoader, setShowLoader} =
     useContext(GlobalState);
 
@@ -34,7 +34,7 @@ function TaskForm() {
   }, [currentTask]);
 
   useEffect(() => {
-    console.log(showLoader)
+   
     if (showLoader?.status) {
       const btn = showLoader.el;
       btn.innerHTML = `<span class="loader"></span>`;
