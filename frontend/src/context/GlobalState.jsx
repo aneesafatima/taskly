@@ -16,7 +16,7 @@ export function GlobalProvider({ children }) {
   const [refetch, setRefetch] = useState(true);
   const [passwordDetails, setPasswordDetails] = useState({});
   const [showLoader, setShowLoader] = useState(false);
-  // const [isDragging, setIsDragging] = useState(false);
+
 
   return (
     <GlobalState.Provider

@@ -1,20 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { GlobalState } from "../context/GlobalState";
-import { DndContext,   closestCorners, DragOverlay } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DndContext, closestCorners, DragOverlay } from "@dnd-kit/core";
+
 import { arrayMove } from "@dnd-kit/sortable";
 import TaskSection from "./TaskSection";
 
+import DragOverlayCard from "./DragOverlayCard";
+
 function Tasks() {
   const { tasks, setTasks } = useContext(GlobalState);
-  console.log(tasks);
 
   const [changeStatus, setChangeStatus] = useState(false);
-  const [activeId, setActiveId] = useState()
+  const [active, setActive] = useState();
 
   // if (tasks) {
   //   todo = [...tasks?.todo];
@@ -44,70 +42,89 @@ function Tasks() {
   //   }
   // }, [changeStatus]);
 
-  const findContainer = () => {
-
-  }
-
-
+  const findIndex = (type, id, container) => {
+    if (type === "task")
+      return tasks[container].findIndex((el, i) => el._id === id);
+    else return -1;
+  };
 
   const handleDragStart = (event) => {
-  const {active} = event;
-  const {id} = active;
-  setActiveId(id);
+    const { active } = event;
+    const { id } = active;
+
+    setActive(tasks[active.data.current.section].find((el) => el._id === id));
   };
 
   const onHandleMove = (event) => {
     if (!event.over || !event.active) return;
-    const {active, over} = event;
+    console.log(event);
+    const { active, over } = event;
     const activeData = active.data.current;
     const overData = over.data.current;
-    console.log(event)
 
+    const activeContainer = [...tasks[activeData.section]];
+    const overContainer = [...tasks[overData.section]];
 
-    const activeContainer = tasks[activeData.section];
-    const overContainer = tasks[overData.section];
+    if (!activeContainer || !overContainer) return;
 
-    if(activeData.type === "task" && overData.type === "task" && active.id != over.id){
+    const activeIndex = findIndex(
+      activeData.type,
+      active.id,
+      activeData.section
+    );
+    const overIndex = findIndex(overData.type, over.id, overData.section);
 
-      const activeIndex = activeData.sortable.index;
-      const overIndex = overData.sortable.index;
+    if (
+      activeData.type === "task" &&
+      overData.type === "task" &&
+      active.id !== over.id
+    ) {
+      if (activeData.section === overData.section) {
+        //For sorting tasks in same container
 
-      if(activeData.section === overData.section){
         const updatedArray = arrayMove(activeContainer, activeIndex, overIndex);
-        setTasks(prev => ({...prev, [activeData.section] : updatedArray}))
+        setTasks((prev) => ({
+          ...prev,
+          [activeData.section]: [...updatedArray],
+        }));
+      } else if (activeData.section !== overData.section) {
+        //For sorting tasks in different container
+
+        const [removedItem] = activeContainer.splice(activeIndex, 1);
+        console.log(removedItem);
+        overContainer.splice(overIndex, 0, removedItem);
+
+        setTasks((prev) => ({
+          ...prev,
+          [activeData.section]: [...activeContainer],
+          [overData.section]: [...overContainer],
+        }));
       }
-      
     }
 
+    if (
+      activeData.type === "task" &&
+      overData.type === "container" &&
+      active.id !== over.id
+    ) {
+      //For sorting task over another container
+      console.log("For sorting task over another container");
 
+      const [removedItem] = activeContainer.splice(activeIndex, 1);
+      overContainer.push(removedItem);
 
-  
-   
-      
+      setTasks((prev) => ({
+        ...prev,
+        [activeData.section]: [...activeContainer],
+        [overData.section]: [...overContainer],
+      }));
+    }
   };
 
-  // const handleDragEnd = (event) => {
+  const handleDragEnd = (event) => {
+    setActive(null);
+  };
 
-  //   const { active, over } = event;
-  //   if(!over) return
-  //   console.log(event)
-  //  const overContainer = over.data.current.container;
-  //  const activeContainer = active.data.current.container;
-
-  //   if (active.id !== over.id && (activeContainer === overContainer)) {
-  //     const activeIndex = active.data.current.sortable.index;
-  //     const overIndex = over.data.current.sortable.index;
-  //     const array = overContainer === "todo" ? todo : (overContainer=== "progress" ? progress : completed )
-  //     const updatedTasks = arrayMove(array, activeIndex, overIndex);
-  //     setTasks((prev) => ({ ...prev, [over.data.current.container]: updatedTasks }));
-  //     // setChangeStatus(true);
-  //     // console.log("Entered handler");
-  //   }
-  // };
-
-  // const handleDragEnd = (event) => {
-  //   setIsDragging(false);
-  // };
   return (
     <section className="tasks w-[680px] px-2 cursor-default mx-2">
       <h2 className="font-lato font-bold text-3xl mode-items m-6">
@@ -116,28 +133,28 @@ function Tasks() {
       <DndContext
         onDragStart={handleDragStart}
         onDragMove={onHandleMove}
-        // onDragEnd={handleDragEnd}
+        onDragEnd={handleDragEnd}
         collisionDetection={closestCorners}
       >
-        
-          <div className="flex h-[85vh]  space-x-2">
-            <TaskSection array={[...tasks?.todo]} gradient="bg-to-do-gradient" id="todo" />
-            <TaskSection
-              array={[...tasks?.progress]} 
-              gradient="bg-progress-gradient"
-              id="progress"
-            />
-            <TaskSection
-              array={[...tasks?.completed]} 
-              gradient="bg-completed-gradient"
-              id="completed"
-            />
-          </div>
-        
+        <div className="flex h-[85vh]  space-x-2">
+          <TaskSection
+            array={[...tasks?.todo]}
+            gradient="bg-to-do-gradient"
+            id="todo"
+          />
+          <TaskSection
+            array={[...tasks?.progress]}
+            gradient="bg-progress-gradient"
+            id="progress"
+          />
+          <TaskSection
+            array={[...tasks?.completed]}
+            gradient="bg-completed-gradient"
+            id="completed"
+          />
+        </div>
 
-<DragOverlay>
-{activeId &&  <div className="w-40 h-40 bg-yellow-200 opacity-50">I am being dragged</div>}
-      </DragOverlay>
+        <DragOverlay>{active && <DragOverlayCard task={active} />}</DragOverlay>
       </DndContext>
     </section>
   );

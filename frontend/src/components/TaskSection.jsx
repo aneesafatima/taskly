@@ -14,7 +14,9 @@ function TaskSection({ array, gradient, id }) {
     }
   });
 
-  const ids = array?.map((el) => el._id);
+
+
+
 
   return (
     array && (
@@ -31,7 +33,7 @@ function TaskSection({ array, gradient, id }) {
           </div>
 
           <ul className="todo-list  mt-2 space-y-2 overflow-y-scroll  scrollbar flex-grow">
-          <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+          <SortableContext items={array.map((el) => el._id)} strategy={verticalListSortingStrategy}>
             {array?.map((el, i) => (
               <TaskCard task={el} id={el._id} section={id} />
             ))}
