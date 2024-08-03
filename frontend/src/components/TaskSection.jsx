@@ -7,36 +7,39 @@ import {
 } from "@dnd-kit/sortable";
 
 function TaskSection({ array, gradient, id }) {
-  
   const { setNodeRef } = useDroppable({
-    id,
+    id, data: {
+      type: "container",
+      section: id
+    }
   });
 
-  const ids = array?.map((el, i) => `${id}-${i}`);
- 
-  
+  const ids = array?.map((el) => el._id);
 
   return (
+    array && (
+      
+        <div
+          className="w-1/3 h-full flex flex-col  p-1 rounded-xl border-[1.5px] border-border-color border-dashed z-20"
+          ref={setNodeRef}
+        >
+          <div
+            className={`w-full h-10 ${gradient} rounded-xl text-[16px] font-roboto font-medium text-white text-center leading-10`}
+          >
+            {id}
+            {array ? `(${array.length})` : ""}
+          </div>
 
-    array && 
-    <div
-      className="w-1/3 h-full flex flex-col  p-1 rounded-xl border-[1.5px] border-border-color border-dashed"
-      ref={setNodeRef}
-    >
-      <div
-        className={`w-full h-10 ${gradient} rounded-xl text-[16px] font-roboto font-medium text-white text-center leading-10`}
-      >
-        {id}
-        {array ? `(${array.length})` : ""}
-      </div>
-      <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-        <ul className="todo-list min-h- mt-2 space-y-2 overflow-y-scroll  scrollbar flex-grow">
-          {array?.map((el, i) => (
-            <TaskCard task={el} id={ids[i]} />
-          ))}
-        </ul>
-      </SortableContext>
-    </div>
+          <ul className="todo-list  mt-2 space-y-2 overflow-y-scroll  scrollbar flex-grow">
+          <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+            {array?.map((el, i) => (
+              <TaskCard task={el} id={el._id} section={id} />
+            ))}
+              </SortableContext>
+          </ul>
+        </div>
+    
+    )
   );
 }
 

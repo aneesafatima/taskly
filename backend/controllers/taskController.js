@@ -2,21 +2,21 @@ const Task = require("../models/taskModel");
 const catchAsync = require("../utils/catchAsync");
 
 exports.getAllTasks = catchAsync(async (req, res, next) => {
-  const todoTasks = await Task.find({ user: req.user, status: "todo" }).sort({
+  const todo = await Task.find({ user: req.user, status: "todo" }).sort({
     order: 1,
   });
-  const progressTasks = await Task.find({
+  const progress = await Task.find({
     user: req.user,
     status: "progress",
   }).sort({ order: 1 });
-  const completedTasks = await Task.find({
+  const completed = await Task.find({
     user: req.user,
     status: "completed",
   }).sort({ order: 1 });
   res.status(200).json({
     status: "success",
     user: req.user,
-    tasks: { todoTasks, progressTasks, completedTasks },
+    tasks: { todo, progress, completed },
   });
 });
 
