@@ -12,7 +12,7 @@ import { HiUserCircle } from "react-icons/hi";
 import { FaPerson } from "react-icons/fa6";
 function Settings() {
   //fix dark mode issue
-  //fix loader in btn issue
+
   //refactor
   const {
     userDetails,

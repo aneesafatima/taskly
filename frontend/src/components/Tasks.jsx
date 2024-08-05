@@ -42,7 +42,7 @@ function Tasks() {
   //   }
   // }, [changeStatus]);
 
-  const findIndex = (type, id, container) => {
+  const getIndex = (type, id, container) => {
     if (type === "task")
       return tasks[container].findIndex((el, i) => el._id === id);
     else return -1;
@@ -67,21 +67,23 @@ function Tasks() {
 
     if (!activeContainer || !overContainer) return;
 
-    const activeIndex = findIndex(
+    const activeIndex = getIndex(
       activeData.type,
       active.id,
       activeData.section
     );
-    const overIndex = findIndex(overData.type, over.id, overData.section);
+    const overIndex = getIndex(overData.type, over.id, overData.section);
 
     if (
       activeData.type === "task" &&
       overData.type === "task" &&
-      active.id !== over.id
+      active.id !== over.id &&
+      activeIndex !== -1 &&
+      overIndex !== -1
     ) {
       if (activeData.section === overData.section) {
         //For sorting tasks in same container
-
+        console.log("For sorting tasks in same container");
         const updatedArray = arrayMove(activeContainer, activeIndex, overIndex);
         setTasks((prev) => ({
           ...prev,
@@ -91,7 +93,6 @@ function Tasks() {
         //For sorting tasks in different container
 
         const [removedItem] = activeContainer.splice(activeIndex, 1);
-        console.log(removedItem);
         overContainer.splice(overIndex, 0, removedItem);
 
         setTasks((prev) => ({
@@ -105,10 +106,11 @@ function Tasks() {
     if (
       activeData.type === "task" &&
       overData.type === "container" &&
-      active.id !== over.id
+      active.id !== over.id &&
+      overData.section !== activeData.section &&
+      activeIndex !== -1
     ) {
       //For sorting task over another container
-      console.log("For sorting task over another container");
 
       const [removedItem] = activeContainer.splice(activeIndex, 1);
       overContainer.push(removedItem);

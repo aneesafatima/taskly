@@ -8,18 +8,25 @@ import { WithContext as ReactTags } from "react-tag-input";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for DatePicker
 
 import axios from "axios";
+
 function TaskForm() {
-  //starttime
   //refactor
 
- 
-  const {  currentTask, setAddTask, setRefetch, setCurrentTask , showLoader, setShowLoader} =
-    useContext(GlobalState);
+  const {
+    currentTask,
+    setAddTask,
+    setRefetch,
+    setCurrentTask,
+    showLoader,
+    setShowLoader,
+  } = useContext(GlobalState);
 
   const [taskDetails, setTaskDetails] = useState({});
   const [tags, setTags] = useState([]);
-  
 
+  useEffect(() => {
+    console.log(showLoader);
+  }, [showLoader]);
 
   useEffect(() => {
     setTaskDetails({
@@ -33,16 +40,9 @@ function TaskForm() {
     setTags(currentTask?.tags);
   }, [currentTask]);
 
-  useEffect(() => {
-   
-    if (showLoader?.status) {
-      const btn = showLoader.el;
-      btn.innerHTML = `<span class="loader"></span>`;
-    }
-  }, [showLoader]);
-
   const handleTaskUpdation = (e) => {
-    setShowLoader({el : e.currentTarget, status : true});
+    e.preventDefault();
+    setShowLoader(true);
     setTimeout(async () => {
       try {
         const res = await axios({
@@ -57,16 +57,18 @@ function TaskForm() {
           setShowLoader(false);
           setAddTask(false);
           setRefetch(true);
-          setCurrentTask("")
+          setCurrentTask("");
         }
       } catch (err) {
         console.log(err);
+        showAlert(err.response.data?.message);
+        setShowLoader(false);
       }
     }, 500);
   };
 
   const handleTaskDeletion = (e) => {
-    setShowLoader({el : e.target, status: true});
+    setShowLoader(true);
     setTimeout(async () => {
       try {
         const res = await axios({
@@ -79,10 +81,11 @@ function TaskForm() {
           setRefetch(true);
           setAddTask(false);
           setShowLoader(false);
-          setCurrentTask("")
+          setCurrentTask("");
         }
       } catch (err) {
-        console.log(err);
+        showAlert(err.response.data?.message);
+        setShowLoader(false);
       }
     }, 500);
   };
@@ -116,6 +119,16 @@ function TaskForm() {
     setTags((prev) => prev?.filter((el, i) => i !== index));
   };
 
+  const showAlert = (message) => {
+    const container = document.getElementById("task-form");
+    console.log(message);
+    const alert = `<div style="font-size: 13px; background-color: #d9f3f8; padding: 8px 10px; width:90%; border-radius: 10px; text-align: center; margin: auto;" class="alert">${
+      message.includes(":") ? message.split(":")[2] : message
+    }</div>`;
+    container.insertAdjacentHTML("afterbegin", alert);
+    const alertEl = container.querySelector(".alert");
+    setTimeout(() => alertEl.remove(), 3000);
+  };
   //clear doubt
   return (
     <div className="task-details px-3 pb-5 h-full overflow-y-scroll scrollbar flex flex-col justify-between">
@@ -128,7 +141,7 @@ function TaskForm() {
           />
         </h1>
 
-        <form className="task-form flex flex-col space-y-3">
+        <form id="task-form" className=" flex flex-col space-y-3">
           <input
             type="text"
             name="title"
@@ -306,10 +319,11 @@ function TaskForm() {
           )}
           <button
             type="submit"
+            form="task-form"
             className="form-submit-btn h-8 w-20 text-xs rounded-lg flex items-center justify-center bg-blue-800 text-[#f2f2f2] hover:bg-blue-900  text-center font-medium"
             onClick={handleTaskUpdation}
           >
-            Done
+            {showLoader ? <span className="loader"></span> : "Done"}
           </button>
         </div>
       </div>

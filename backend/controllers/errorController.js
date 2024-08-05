@@ -26,11 +26,13 @@ const validationError = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
   return new ErrorHandler(`Invalid Input data: ${errors[0]}`, 400)
 };
-const duplicateErrors = (err) => {
+const duplicateErrors = () => {
+  console.log("Entered duplicate")
  return new ErrorHandler("This email is taken !", 400)
 }
 
 module.exports = (err, req, res, next) => {
+  console.log(err)
   err.statusCode = err.statusCode || 500
   err.status = err.status || "error"
 
@@ -39,8 +41,8 @@ module.exports = (err, req, res, next) => {
     if (err.name === "ValidationError") {
       error = validationError(err);
     }
-  if(err.code === 11000)  
-    error = duplicateErrors(err)
+  if(err.code ===  11000)  
+    error = duplicateErrors()
 
     errorProd(error, res);
   } else if (process.env.NODE_ENV === "development") errorDev(err, res);

@@ -14,7 +14,7 @@ import { HiUserCircle } from "react-icons/hi";
 import { GlobalState } from "../context/GlobalState";
 
 function auth() {
-  //check if email actaully exists
+  
 
   //<a href="https://www.flaticon.com/free-icons/task" title="task icons">Task icons created by AmruID - Flaticon</a>
 
@@ -27,6 +27,8 @@ function auth() {
     setUserDetails,
     passwordDetails,
     setPasswordDetails,
+    showLoader,
+    setShowLoader,
   } = useContext(GlobalState);
 
   const navigate = useNavigate();
@@ -34,8 +36,8 @@ function auth() {
   const handleFormSubmission = async (e) => {
     e.preventDefault();
     try {
-      console.log(userDetails);
-      console.log(authStatus);
+      setShowLoader(true);
+
       const res = await axios.post(
         authStatus === "signup"
           ? "http://localhost:3000/api/users/signup"
@@ -46,10 +48,13 @@ function auth() {
         }
       );
       if (res.data?.status === "success") {
+        setShowLoader(false);
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
       setErrMessage(err.response.data.message);
+      setTimeout(() => setErrMessage(""), 2000)
+      setShowLoader(false);
     }
   };
 
@@ -73,12 +78,12 @@ function auth() {
           onSubmit={handleFormSubmission}
         >
           {authStatus === "signup" && (
-            <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
+            <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm ">
               <CiUser size={18} color="black" className="thick-stroke" />
               <input
                 type="name"
                 name="name"
-                className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
+                className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0 "
                 placeholder="Enter your name"
                 onChange={(e) =>
                   setUserDetails((prev) => ({ ...prev, name: e.target.value }))
@@ -90,7 +95,7 @@ function auth() {
               <MdCancel size={17} fill="red" className="cross " />
             </div>
           )}
-          <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm ">
+          <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm ">
             <IoMailOutline size={18} color="black" />
             <input
               type="email"
@@ -106,7 +111,7 @@ function auth() {
             <MdCancel size={17} fill="red" className="cross " />
           </div>
 
-          <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg   flex items-center px-5 py-3 space-x-3 text-sm">
+          <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg focus:border-2 focus:border-blue-500  flex items-center px-5 py-3 space-x-3 text-sm">
             <PiPasswordLight size={18} color="black" className="thick-stroke" />
             <input
               type="password"
@@ -126,7 +131,7 @@ function auth() {
             <MdCancel size={17} fill="red" className="cross " />
           </div>
           {authStatus === "signup" && (
-            <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg w- flex items-center px-5 py-3 space-x-3 text-sm">
+            <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm">
               <CiLock size={18} color="black" className="thick-stroke" />
               <input
                 type="password"
@@ -164,7 +169,15 @@ function auth() {
             className="text-xs font-lato w-[70%] mx-1 text-[#8f8f8f] cursor-pointer hover:underline"
             onClick={changeAuthStatus}
           >
-            {authStatus === "signup" ? "Have an account" : "Create Account"}
+            {!showLoader ? (
+              authStatus === "signup" ? (
+                "Have an account"
+              ) : (
+                "Create Account"
+              )
+            ) : (
+              <span className="loader"></span>
+            )}
           </div>
           <div className="block border-b-[1px] w-full border-[#e2e2e2]"></div>
         </div>

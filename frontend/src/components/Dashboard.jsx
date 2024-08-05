@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
-import {  TaskDetail, Tasks } from ".";
+import {  NotFound, TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
@@ -14,7 +13,6 @@ function dashboard() {
     seTGiveAccess,
     setTasks,
     setErrMessage,
-    errMessage,
     setUser,
     refetch,
     setRefetch,
@@ -44,7 +42,7 @@ function dashboard() {
     }
   }, [refetch]);
 
-  if (!giveAccess) return <div>{errMessage}</div>;
+  if (!giveAccess && !refetch) return <NotFound link="/" code="400 Unauthorized" location="SignUp/Login" message="You are not logged in. Please login to access this page"/>;
   return (
     giveAccess && (
       <div className="flex flex-grow">
