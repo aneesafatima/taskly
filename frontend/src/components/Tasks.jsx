@@ -1,7 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { GlobalState } from "../context/GlobalState";
-import { DndContext, closestCorners, DragOverlay } from "@dnd-kit/core";
+import {
+  DndContext,
+  closestCorners,
+  DragOverlay,
+  KeyboardSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from "@dnd-kit/core";
 
 import { arrayMove } from "@dnd-kit/sortable";
 import TaskSection from "./TaskSection";
@@ -13,39 +22,25 @@ function Tasks() {
 
   const [changeStatus, setChangeStatus] = useState(false);
   const [active, setActive] = useState();
+  const [data, setData] = useState();
 
-  // if (tasks) {
-  //   todo = [...tasks?.todo];
-  //   progress = [...tasks?.progress];
-  //   completed = [...tasks?.completed]; //clear doubt
-  // }
+  const touchSensor = useSensor(TouchSensor, {
+    // Press delay of 250ms, with tolerance of 5px of movement
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
 
-  // useEffect(() => {
-  //   const arr = tasks.todoTasks.map((el) => ({
-  //     _id: el._id,
-  //   }));
-  //   const updateOrder = async () => {
-  //     try {
-  //       const res = await axios.patch(
-  //         "http://localhost:3000/api/tasks/updateOrder",
-  //         { array: arr },
-  //         { withCredentials: true }
-  //       );
-  //       if (res.data?.status === "success") setChangeStatus(false);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-
-  //   if (changeStatus) {
-  //     updateOrder();
-  //   }
-  // }, [changeStatus]);
+  const sensors = useSensors(
+    touchSensor,
+    useSensor(KeyboardSensor),
+    useSensor(PointerSensor)
+  );
 
   const getIndex = (type, id, container) => {
     if (type === "task")
       return tasks[container].findIndex((el, i) => el._id === id);
-    else return -1;
   };
 
   const handleDragStart = (event) => {
@@ -56,8 +51,10 @@ function Tasks() {
   };
 
   const onHandleMove = (event) => {
-    if (!event.over || !event.active) return;
-    console.log(event);
+    if (!event.over || !event.active) {
+      setData(null);
+      return;
+    }
     const { active, over } = event;
     const activeData = active.data.current;
     const overData = over.data.current;
@@ -83,14 +80,19 @@ function Tasks() {
     ) {
       if (activeData.section === overData.section) {
         //For sorting tasks in same container
-        console.log("For sorting tasks in same container");
+
         const updatedArray = arrayMove(activeContainer, activeIndex, overIndex);
         setTasks((prev) => ({
           ...prev,
           [activeData.section]: [...updatedArray],
         }));
+
+        setData({
+          array: [...updatedArray],
+        });
       } else if (activeData.section !== overData.section) {
         //For sorting tasks in different container
+        console.log("Different container")
 
         const [removedItem] = activeContainer.splice(activeIndex, 1);
         overContainer.splice(overIndex, 0, removedItem);
@@ -100,6 +102,11 @@ function Tasks() {
           [activeData.section]: [...activeContainer],
           [overData.section]: [...overContainer],
         }));
+
+        setData({
+          section: overData.section,
+          array: [...overContainer],
+        });
       }
     }
 
@@ -120,15 +127,33 @@ function Tasks() {
         [activeData.section]: [...activeContainer],
         [overData.section]: [...overContainer],
       }));
+
+      setData({
+        section: overData.section,
+        array: [...overContainer],
+      });
     }
   };
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = async () => {
     setActive(null);
+    console.log(data);
+
+    if (data) {
+      try {
+        await axios.patch(
+          "http://localhost:3000/api/tasks/updateOrder",
+          { data },
+          { withCredentials: true }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   return (
-    <section className="tasks w-[680px] px-2 cursor-default mx-2">
+    <section className="tasks w-[680px] px-2 cursor-default mx-2 overflow-hidden">
       <h2 className="font-lato font-bold text-3xl mode-items m-6">
         Tackle Today, Triumph Tomorrow.
       </h2>
@@ -137,6 +162,7 @@ function Tasks() {
         onDragMove={onHandleMove}
         onDragEnd={handleDragEnd}
         collisionDetection={closestCorners}
+        sensors={sensors}
       >
         <div className="flex h-[85vh]  space-x-2">
           <TaskSection

@@ -67,34 +67,21 @@ exports.updateTask = catchAsync(async (req, res, next) => {
 });
 
 exports.updateTasksOrder = catchAsync(async (req, res, next) => {
-  const { array, container } = req.body;
+  const { data } = req.body;
 
-  const bulkOps = array.map((el, i) => ({
+  console.log(data.array);
+  console.log(data.section);
+
+  const bulkOps = data.array.map((el, i) => ({
     updateOne: {
       filter: { _id: el._id },
-      update: { $set: { order: i } },
+      update: { $set: { order: i, status: data.section ?? el.status } },
     },
   }));
 
-  const tasks = await Task.bulkWrite(bulkOps);
+  await Task.bulkWrite(bulkOps);
 
   res.status(200).json({
     status: "success",
   });
 });
-
-/*todoTasks
-: 
-Array(4)
-0
-: 
-{_id: '66a8befcf1f84021c65ef085', title: 'second', startDate: '2024-07-30T10:22:45.563Z', dueDate: '2024-07-30T10:22:45.563Z', priority: 'low', …}
-1
-: 
-{_id: '66a8bef3f1f84021c65ef07a', title: 'first', startDate: '2024-07-30T10:22:37.792Z', dueDate: '2024-07-30T10:22:37.792Z', priority: 'low', …}
-2
-: 
-{_id: '66a8bf36f1f84021c65ef090', title: 'third', startDate: '2024-07-30T10:23:45.134Z', dueDate: '2024-07-30T10:23:45.134Z', priority: 'low', …}
-3
-: 
-{_id: '66a8bf41f1f84021c65ef09b', title: 'fourth', startDate: '2024-07-30T10:23:55.077*/
