@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { GlobalState } from "../context/GlobalState";
 import { IoMailOutline } from "react-icons/io5";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -10,9 +11,9 @@ import { PiPasswordLight } from "react-icons/pi";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { HiUserCircle } from "react-icons/hi";
 import { FaPerson } from "react-icons/fa6";
-function Settings() {
-  //fix dark mode issue
+import { showAlert } from "../assets/helpers";
 
+function Settings() {
   //refactor
   const {
     userDetails,
@@ -22,10 +23,13 @@ function Settings() {
     user,
     seTGiveAccess,
     giveAccess,
-    setErrMessage,
     setUser,
-   setShowLoader
+    setShowLoader,
+    showLoader,
+    setShowErr,
+    showErr,
   } = useContext(GlobalState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -39,7 +43,7 @@ function Settings() {
           setUser(res.data.user);
         }
       } catch (err) {
-        setErrMessage(err.response?.data.message);
+        setShowErr({ status: true, message: err.message });
       }
     }
     fetchData();
@@ -48,10 +52,7 @@ function Settings() {
   const handleFormSubmission = async (e, type, data) => {
     e.preventDefault();
     try {
-      setShowLoader({
-        el: e.currentTarget.querySelector(".form-submit-btn"),
-        status: true,
-      });
+      setShowLoader({ status: true, feature: type });
 
       const res = await axios({
         url:
@@ -62,21 +63,77 @@ function Settings() {
         data,
         withCredentials: true,
       });
-      
-  
+
       if (res.data?.status === "success") {
-        setUser(res.data.updatedUser)
-        setShowLoader(false);
+        setUser(res.data.user);
+
+        setTimeout(() => {
+          if (type === "password") {
+            document.getElementsByName("password")[0].value = "";
+            document.getElementsByName("new password")[0].value = "";
+            document.getElementsByName("confirm password")[0].value = "";
+          }
+          showAlert("Data updated !", "settings");
+          setShowLoader(false);
+        }, 1000);
       }
     } catch (err) {
-      setErrMessage(err.response?.data.message);
+      console.log(err);
+      showAlert(err.response.data.message, "settings");
+      setShowLoader(false);
+    }
+  };
+
+  const handleLogOut = async () => {
+    try {
+      setShowLoader({ status: true, feature: "logout" });
+      const res = await axios.get("http://localhost:3000/api/users/logout", {
+        withCredentials: true,
+      });
+
+      if (res.data?.status === "success") {
+        setTimeout(() => {
+          seTGiveAccess(false);
+          setShowLoader(false);
+          setUser("");
+          navigate("/");
+        }, 1000);
+      }
+    } catch (err) {
+      console.log(err);
+      setShowLoader(false);
+    }
+  };
+
+  const handleDeleteMe = async () => {
+    try {
+      setShowLoader({ status: true, feature: "delete" });
+      console.log(user);
+      await axios.delete(
+        `http://localhost:3000/api/users/deleteMe/${user._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("SUCCESS");
+      setTimeout(() => {
+        seTGiveAccess(false);
+        setShowLoader(false);
+        setUser("");
+        navigate("/");
+      }, 1000);
+    } catch (err) {
+      console.log(err);
       setShowLoader(false);
     }
   };
 
   return (
     giveAccess && (
-      <div className="flex-grow px-28 py-5 h-screen overflow-y-scroll scrollbar">
+      <div
+        className="flex-grow px-28 py-5 h-screen overflow-y-scroll scrollbar"
+        id="settings"
+      >
         <HiUserCircle size={150} className="text-priority-color" />
 
         <form
@@ -147,12 +204,17 @@ function Settings() {
               type="submit"
               className="form-submit-btn py-2 my-5 w-fit px-6 text-sm rounded-lg bg-blue-800 text-[#f2f2f2] hover:bg-blue-900"
             >
-              Save Settings
+              {showLoader.status && showLoader.feature === "settings" ? (
+                <span className="loader"></span>
+              ) : (
+                "Save Settings"
+              )}
             </button>
           </div>
         </form>
-        <form className="auth-form flex flex-col space-y-5 mt-4"
-      onSubmit={(e) => handleFormSubmission(e, "password", passwordDetails)}
+        <form
+          className="auth-form flex flex-col space-y-5 mt-4"
+          onSubmit={(e) => handleFormSubmission(e, "password", passwordDetails)}
         >
           <span className="font-roboto font-medium text-tags-color text-sm">
             Security Details
@@ -165,6 +227,7 @@ function Settings() {
             <input
               type="password"
               name="password"
+              id="password"
               placeholder="Enter your password"
               minLength={8}
               autoComplete="current-password"
@@ -185,17 +248,16 @@ function Settings() {
             <CiLock size={18} className="thick-stroke text-priority-color" />
             <input
               type="password"
-              name="passwordConfirm"
+              name="new password"
               className="w-full h-full font-roboto p-1 px-4 border-l-[1px] border-priority-color bg-transparent outline-none border-0 mode-items"
               placeholder="Confirm your password"
               minLength={8}
               onChange={(e) =>
                 setPasswordDetails((prev) => ({
                   ...prev,
-                  passwordConfirm: e.target.value,
+                  newPassword: e.target.value,
                 }))
               }
-              pattern={passwordDetails.password}
               title="Passwords do not match."
               required
             />
@@ -206,16 +268,18 @@ function Settings() {
             <MdOutlineFiberNew size={20} className="text-priority-color" />
             <input
               type="password"
-              name="new password"
+              name="confirm password"
               className="w-full h-full font-roboto p-1 px-4  border-l-[1px] border-priority-color bg-transparent outline-none border-0 mode-items"
               placeholder="Enter new password"
               minLength={8}
               onChange={(e) =>
                 setPasswordDetails((prev) => ({
                   ...prev,
-                  newPassword: e.target.value,
+                  passwordConfirm: e.target.value,
                 }))
               }
+              pattern={passwordDetails.newPassword}
+              title="passwords do not match"
               required
             />
             <FaCircleCheck fill="green" className="check" />
@@ -226,10 +290,39 @@ function Settings() {
               type="submit"
               className="form-submit-btn py-2 my-5 w-fit px-6 text-sm rounded-lg bg-blue-800 text-[#f2f2f2] hover:bg-blue-900"
             >
-              Save Password
+              {showLoader.status && showLoader.feature === "password" ? (
+                <span className="loader"></span>
+              ) : (
+                "Save Password"
+              )}
             </button>
           </div>
         </form>
+
+        <div className="flex space-x-2 justify-end">
+          <button
+            type="button"
+            className="form-submit-btn py-2 my-5 w-fit px-6 text-sm rounded-lg bg-red-600  text-[#f2f2f2] hover:bg-red-800"
+            onClick={handleDeleteMe}
+          >
+            {showLoader.status && showLoader.feature === "delete" ? (
+              <span className="loader"></span>
+            ) : (
+              "Delete Me"
+            )}
+          </button>
+          <button
+            type="button"
+            className="form-submit-btn py-2 my-5 w-fit px-6 text-sm rounded-lg bg-red-600  text-[#f2f2f2] hover:bg-red-800"
+            onClick={handleLogOut}
+          >
+            {showLoader.status && showLoader.feature === "logout" ? (
+              <span className="loader"></span>
+            ) : (
+              "Log out"
+            )}
+          </button>
+        </div>
       </div>
     )
   );
