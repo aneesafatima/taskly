@@ -41,9 +41,10 @@ body {
   --tags-bg: #35353577;
   --tags-color: #f2f2f2;
 }
-.text-white {
+.darkmode .mode-items{
   color: white;
 }
+
 
 
 .task-form select {

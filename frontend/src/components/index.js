@@ -8,3 +8,4 @@ export { default as TaskDetail } from "./TaskDetail";
 export { default as TaskForm } from "./TaskForm";
 export { default as TaskSection } from "./TaskSection";
 export { default as NotFound } from "./NotFound"
+export { default as ErrComponent } from "./ErrComponent"

@@ -97,20 +97,22 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.updateMyPassword = catchAsync(async (req, res, next) => {
   const { password, passwordConfirm, newPassword } = req.body;
+  console.log(req.body);
   const user = await User.findOne({ _id: req.user._id }).select("+password");
+  console.log(user);
 
-  if (
-    password !== passwordConfirm ||
-    !await user.comparePasswords(password, user.password)
-  )
-    return next(new ErrorHandler("Invalid password", 401));
+  if (!password || !(await user.comparePasswords(password, user.password)))
+    return next(new ErrorHandler("Invalid password", 400));
   //add a middleware to set a passwordChangedAt date
+
+  console.log("correct")
   user.password = newPassword;
-  user.passwordConfirm = newPassword;
+  user.passwordConfirm = passwordConfirm;
   await user.save(); //validators for all the fields are run
 
   sendToken(user, 200, res);
 });
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredObject = filterObject(req.body, "name", "email", "status");
 
@@ -123,20 +125,30 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     }
   );
 
- res.status(200).json({
-  status: "success", 
-  updatedUser
- })
+  res.status(200).json({
+    status: "success",
+    user: updatedUser,
+  });
 });
 
 exports.logOut = (req, res) => {
   res.cookie("jwt", "loggedout", {
-    expires: new Date(
-      Date.now() + 10*1000
-    ), //this property expects a date object
+    expires: new Date(Date.now() + 10 * 1000), //this property expects a date object
     secure: process.env.NODE_ENV === "development" ? false : true,
     path: "/",
     //only when in dev mode send the cookie over http otherwise https
     httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
   });
+  res.status(200).json({
+    status: "success",
+  });
 };
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const { userId } = req.params;
+  console.log(userId);
+  await User.findByIdAndDelete(userId);
+  res.status(204).json({
+    status: "success"
+  });
+});

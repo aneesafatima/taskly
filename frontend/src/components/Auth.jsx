@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import coverPng from "/assets/taskly-cover.png";
@@ -9,7 +9,7 @@ import { MdCancel } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import { PiPasswordLight } from "react-icons/pi";
 import { SiTask } from "react-icons/si";
-import { HiUserCircle } from "react-icons/hi";
+
 
 import { GlobalState } from "../context/GlobalState";
 
@@ -29,6 +29,7 @@ function auth() {
     setPasswordDetails,
     showLoader,
     setShowLoader,
+    seTGiveAccess
   } = useContext(GlobalState);
 
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ function auth() {
       );
       if (res.data?.status === "success") {
         setShowLoader(false);
+        seTGiveAccess(true)
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {

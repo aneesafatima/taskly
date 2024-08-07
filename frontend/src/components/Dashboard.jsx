@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import axios from "axios";
-import {  NotFound, TaskDetail, Tasks } from ".";
+import {  ErrComponent, NotFound, TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
@@ -12,10 +12,11 @@ function dashboard() {
     giveAccess,
     seTGiveAccess,
     setTasks,
-    setErrMessage,
     setUser,
     refetch,
     setRefetch,
+    setShowErr,
+    showErr
   } = useContext(GlobalState);
 
 
@@ -34,7 +35,8 @@ function dashboard() {
             setTasks(res.data.tasks);
           }
         } catch (err) {
-          setErrMessage(err.response?.data.message);
+          setShowErr({status:true, message: err.message})
+          
         }
         setRefetch(false);
       }
@@ -42,9 +44,13 @@ function dashboard() {
     }
   }, [refetch]);
 
-  if (!giveAccess && !refetch) return <NotFound link="/" code="400 Unauthorized" location="SignUp/Login" message="You are not logged in. Please login to access this page"/>;
+  if(showErr.status)
+    return <ErrComponent message={showErr.message}/>
+
+
   return (
-    giveAccess && (
+
+    giveAccess && !refetch && (
       <div className="flex flex-grow">
         <Tasks />
         <TaskDetail />

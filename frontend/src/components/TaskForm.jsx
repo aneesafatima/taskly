@@ -5,6 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import { WithContext as ReactTags } from "react-tag-input";
+import { showAlert } from "../assets/helpers";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for DatePicker
 
 import axios from "axios";
@@ -61,7 +62,7 @@ function TaskForm() {
         }
       } catch (err) {
         console.log(err);
-        showAlert(err.response.data?.message);
+        showAlert(err.response.data?.message, "task-form");
         setShowLoader(false);
       }
     }, 500);
@@ -119,16 +120,7 @@ function TaskForm() {
     setTags((prev) => prev?.filter((el, i) => i !== index));
   };
 
-  const showAlert = (message) => {
-    const container = document.getElementById("task-form");
-    console.log(message);
-    const alert = `<div style="font-size: 13px; background-color: #d9f3f8; padding: 8px 10px; width:90%; border-radius: 10px; text-align: center; margin: auto;" class="alert">${
-      message.includes(":") ? message.split(":")[2] : message
-    }</div>`;
-    container.insertAdjacentHTML("afterbegin", alert);
-    const alertEl = container.querySelector(".alert");
-    setTimeout(() => alertEl.remove(), 3000);
-  };
+ 
   //clear doubt
   return (
     <div className="task-details px-3 pb-5 h-full overflow-y-scroll scrollbar flex flex-col justify-between">

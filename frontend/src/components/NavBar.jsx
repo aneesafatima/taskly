@@ -15,15 +15,12 @@ function NavBar({ active }) {
   const handleToggleMode = () => {
     setMode((prev) => (prev === "light" ? "dark" : "light"));
     document.body.classList.toggle("darkmode");
-    document
-      .querySelectorAll(".mode-items")
-      .forEach((el) => el.classList.toggle("text-white"));
   };
 
   return (
     <nav className="nav-bar w-52 bg-nav-color h-screen cursor-default pt-4 relative">
       <div className=" mb-5 pl-3">
-        <h2 className="font-roboto font-extrabold text-lg mode-items ">
+        <h2 className={`font-roboto font-extrabold text-lg mode-items `}>
           <SiTask className="inline mr-1" />
           Taskly
         </h2>
@@ -35,7 +32,7 @@ function NavBar({ active }) {
         <HiUserCircle size={35} className="mr-2 text-priority-color"/>
        
         <div className="flex flex-col">
-          <span className="font-bold font-roboto text-sm mode-items">
+          <span className={`font-bold font-roboto text-sm mode-items `}>
             {user.name}
           </span>
           <span className="text-[10px] text-[#767575]">{user.email}</span>

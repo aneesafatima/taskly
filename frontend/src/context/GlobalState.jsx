@@ -16,7 +16,7 @@ export function GlobalProvider({ children }) {
   const [refetch, setRefetch] = useState(true);
   const [passwordDetails, setPasswordDetails] = useState({});
   const [showLoader, setShowLoader] = useState(false);
-
+  const [showErr, setShowErr] = useState(false);
 
   return (
     <GlobalState.Provider
@@ -45,7 +45,8 @@ export function GlobalProvider({ children }) {
         setPasswordDetails,
         showLoader,
         setShowLoader,
-       
+        showErr,
+        setShowErr,
       }}
     >
       {children}

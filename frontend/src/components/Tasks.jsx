@@ -10,6 +10,7 @@ import {
   useSensor,
   useSensors,
   PointerSensor,
+  MouseSensor
 } from "@dnd-kit/core";
 
 import { arrayMove } from "@dnd-kit/sortable";
@@ -35,7 +36,8 @@ function Tasks() {
   const sensors = useSensors(
     touchSensor,
     useSensor(KeyboardSensor),
-    useSensor(PointerSensor)
+    useSensor(PointerSensor),
+    useSensor(MouseSensor)
   );
 
   const getIndex = (type, id, container) => {
@@ -165,6 +167,7 @@ function Tasks() {
         sensors={sensors}
       >
         <div className="flex h-[85vh]  space-x-2">
+     
           <TaskSection
             array={[...tasks?.todo]}
             gradient="bg-to-do-gradient"

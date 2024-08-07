@@ -4,14 +4,7 @@ import { GlobalState } from "../context/GlobalState";
 
 function TaskDetail() {
   const { addTask, setAddTask, mode , tasks} = useContext(GlobalState);
-  useEffect(() => {
-   
-      document.querySelectorAll(".mode-items").forEach((el) => {
-        if (mode === "dark") el.classList.add("text-white");
-        else el.classList.remove("text-white");
-      });
-   
-  }, [addTask,tasks]);
+ 
 
   return (
     <div className="flex-grow h-screen bg-nav-color ">
