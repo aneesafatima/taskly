@@ -22,7 +22,7 @@ function TaskCard({ task, id, section }) {
   return (
     task && (
       <li
-        className="w-full min-h-40 bg-task-bg rounded-xl p-3 flex flex-col justify-between touch-none"
+        className="w-full sm:w-full h-36 sm:min-h-40 bg-task-bg rounded-xl p-3 flex flex-col justify-between touch-none"
         style={{ opacity: isDragging ? "0.7" : "1" , border: isDragging ? "1px solid #000" : null }}
         ref={setNodeRef}
       >

@@ -18,7 +18,7 @@ function TaskSection({ array, gradient, id }) {
   return (
     array && (
       <div
-        className="w-1/3 h-full flex flex-col  p-1 rounded-xl border-[1.5px] border-border-color border-dashed z-20"
+        className="w-full h-full md:w-1/3 flex flex-col  p-1 rounded-xl border-[1.5px] border-border-color border-dashed z-20"
         ref={setNodeRef}
       >
         <div

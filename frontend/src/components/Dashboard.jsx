@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import axios from "axios";
-import { ErrComponent, NotFound, TaskDetail, Tasks } from ".";
+import { ErrComponent, TaskDetail, Tasks } from ".";
+
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
@@ -43,11 +44,14 @@ function dashboard() {
   }, [refetch]);
 
   if (showErr.status) return <ErrComponent message={showErr.message} />;
+  if(refetch){
+    return <div className="flex items-center justify-center w-full"><span class="main-loader"></span> </div>
+  }
 
   return (
     giveAccess &&
     !refetch && (
-      <div className="flex flex-grow">
+      <div className="lg:flex w-screen min-h-svh space-y-3 ">
         <Tasks />
         <TaskDetail />
       </div>

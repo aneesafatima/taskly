@@ -7,7 +7,7 @@ function TaskDetail() {
  
 
   return (
-    <div className="flex-grow h-screen bg-nav-color ">
+    <div className="lg:flex-grow h-svh bg-nav-color  ">
       {!addTask && (
         <div className="flex justify-center h-full items-center flex-col">
           <button

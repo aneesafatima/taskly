@@ -29,7 +29,7 @@ function App() {
     );
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       {showNavBar && <NavBar active={active} />}
 
       <Routes>
