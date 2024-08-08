@@ -14,7 +14,6 @@ import { FaPerson } from "react-icons/fa6";
 import { showAlert } from "../assets/helpers";
 
 function Settings() {
-  //refactor
   const {
     userDetails,
     passwordDetails,
@@ -27,7 +26,6 @@ function Settings() {
     setShowLoader,
     showLoader,
     setShowErr,
-    showErr,
   } = useContext(GlobalState);
   const navigate = useNavigate();
 
@@ -41,6 +39,7 @@ function Settings() {
         if (res.data?.status === "success") {
           seTGiveAccess(true);
           setUser(res.data.user);
+          setShowErr(false);
         }
       } catch (err) {
         setShowErr({ status: true, message: err.message });
@@ -78,16 +77,21 @@ function Settings() {
         }, 1000);
       }
     } catch (err) {
-      console.log(err);
       showAlert(err.response.data.message, "settings");
       setShowLoader(false);
     }
   };
 
-  const handleLogOut = async () => {
+  const handleLogOutAndDelete = async (feature) => {
     try {
-      setShowLoader({ status: true, feature: "logout" });
-      const res = await axios.get("http://localhost:3000/api/users/logout", {
+      setShowLoader({ status: true, feature });
+
+      const res = await axios({
+        url:
+          feature === "logout"
+            ? "http://localhost:3000/api/users/logout"
+            : `http://localhost:3000/api/users/deleteMe/${user._id}`,
+        method: feature === "logout" ? "GET" : "DELETE",
         withCredentials: true,
       });
 
@@ -100,30 +104,6 @@ function Settings() {
         }, 1000);
       }
     } catch (err) {
-      console.log(err);
-      setShowLoader(false);
-    }
-  };
-
-  const handleDeleteMe = async () => {
-    try {
-      setShowLoader({ status: true, feature: "delete" });
-      console.log(user);
-      await axios.delete(
-        `http://localhost:3000/api/users/deleteMe/${user._id}`,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("SUCCESS");
-      setTimeout(() => {
-        seTGiveAccess(false);
-        setShowLoader(false);
-        setUser("");
-        navigate("/");
-      }, 1000);
-    } catch (err) {
-      console.log(err);
       setShowLoader(false);
     }
   };
@@ -303,7 +283,7 @@ function Settings() {
           <button
             type="button"
             className="form-submit-btn py-2 my-5 w-fit px-6 text-sm rounded-lg bg-red-600  text-[#f2f2f2] hover:bg-red-800"
-            onClick={handleDeleteMe}
+            onClick={() => handleLogOutAndDelete("delete")}
           >
             {showLoader.status && showLoader.feature === "delete" ? (
               <span className="loader"></span>
@@ -314,7 +294,7 @@ function Settings() {
           <button
             type="button"
             className="form-submit-btn py-2 my-5 w-fit px-6 text-sm rounded-lg bg-red-600  text-[#f2f2f2] hover:bg-red-800"
-            onClick={handleLogOut}
+            onClick={() => handleLogOutAndDelete("logout")}
           >
             {showLoader.status && showLoader.feature === "logout" ? (
               <span className="loader"></span>

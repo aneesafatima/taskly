@@ -138,12 +138,13 @@ border: 1px solid var(--main-border-color);
 .loader {
   width: 16px;
   height: 16px;
-  line-height: 32px;
+  line-height: 16px;
   border: 2px solid #FFF;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
+  
   animation: rotation 1s linear infinite;
   }
 

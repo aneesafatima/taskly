@@ -1,12 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import axios from "axios";
-import {  ErrComponent, NotFound, TaskDetail, Tasks } from ".";
+import { ErrComponent, NotFound, TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
-//add loader
-
-
+  //add loader
 
   const {
     giveAccess,
@@ -16,11 +14,10 @@ function dashboard() {
     refetch,
     setRefetch,
     setShowErr,
-    showErr
+    showErr,
   } = useContext(GlobalState);
 
-
-
+  
   useEffect(() => {
     if (refetch) {
       async function fetchData() {
@@ -33,6 +30,7 @@ function dashboard() {
             seTGiveAccess(true);
             setUser(res.data.user);
             setTasks(res.data.tasks);
+            setShowErr(false)
           }
         } catch (err) {
           setShowErr({status:true, message: err.message})
@@ -44,13 +42,11 @@ function dashboard() {
     }
   }, [refetch]);
 
-  if(showErr.status)
-    return <ErrComponent message={showErr.message}/>
-
+  if (showErr.status) return <ErrComponent message={showErr.message} />;
 
   return (
-
-    giveAccess && !refetch && (
+    giveAccess &&
+    !refetch && (
       <div className="flex flex-grow">
         <Tasks />
         <TaskDetail />

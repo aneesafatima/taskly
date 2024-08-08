@@ -3,7 +3,7 @@ import TaskForm from "./TaskForm";
 import { GlobalState } from "../context/GlobalState";
 
 function TaskDetail() {
-  const { addTask, setAddTask, mode , tasks} = useContext(GlobalState);
+  const { addTask, setAddTask} = useContext(GlobalState);
  
 
   return (

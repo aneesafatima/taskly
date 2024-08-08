@@ -26,10 +26,6 @@ function TaskForm() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    console.log(showLoader);
-  }, [showLoader]);
-
-  useEffect(() => {
     setTaskDetails({
       title: currentTask?.title,
       description: currentTask?.description,
@@ -41,56 +37,36 @@ function TaskForm() {
     setTags(currentTask?.tags);
   }, [currentTask]);
 
-  const handleTaskUpdation = (e) => {
+  const handleTaskStatus = (e, feature) => {
     e.preventDefault();
     setShowLoader(true);
     setTimeout(async () => {
       try {
         const res = await axios({
-          url: currentTask
-            ? `http://localhost:3000/api/tasks/${currentTask._id}`
-            : "http://localhost:3000/api/tasks/",
-          method: currentTask ? "PATCH" : "POST",
-          data: { ...taskDetails, tags },
+          url:
+            feature === "delete"
+              ? `http://localhost:3000/api/tasks/${currentTask._id}`
+              : currentTask
+              ? `http://localhost:3000/api/tasks/${currentTask._id}`
+              : "http://localhost:3000/api/tasks/",
+          method:
+            feature === "delete" ? "DELETE" : currentTask ? "PATCH" : "POST",
+          data: feature === "delete" ? undefined : { ...taskDetails, tags },
           withCredentials: true,
         });
+
         if (res.data?.status === "success") {
-          setShowLoader(false);
-          setAddTask(false);
           setRefetch(true);
+          setAddTask(false);
+          setShowLoader(false);
           setCurrentTask("");
         }
       } catch (err) {
-        console.log(err);
         showAlert(err.response.data?.message, "task-form");
         setShowLoader(false);
       }
     }, 500);
   };
-
-  const handleTaskDeletion = (e) => {
-    setShowLoader(true);
-    setTimeout(async () => {
-      try {
-        const res = await axios({
-          url: `http://localhost:3000/api/tasks/${currentTask._id}`,
-          method: "DELETE",
-          withCredentials: true,
-        });
-
-        if (res.data?.status === "success") {
-          setRefetch(true);
-          setAddTask(false);
-          setShowLoader(false);
-          setCurrentTask("");
-        }
-      } catch (err) {
-        showAlert(err.response.data?.message);
-        setShowLoader(false);
-      }
-    }, 500);
-  };
-
   const handleLastUpdated = () => {
     return `last updated (${
       currentTask
@@ -120,8 +96,6 @@ function TaskForm() {
     setTags((prev) => prev?.filter((el, i) => i !== index));
   };
 
- 
-  //clear doubt
   return (
     <div className="task-details px-3 pb-5 h-full overflow-y-scroll scrollbar flex flex-col justify-between">
       <div>
@@ -163,7 +137,7 @@ function TaskForm() {
                   : taskDetails.status === "progress"
                   ? "bg-pink-200"
                   : "bg-blue-200"
-              } rounded-md text-sm py-1 font-normal ml-10 text-[#2c2c2c] text-center`}
+              } rounded-md text-sm py-1 font-normal ml-10 text-[#2c2c2c] text-center cursor-pointer`}
               onChange={(e) =>
                 setTaskDetails((prev) => ({ ...prev, status: e.target.value }))
               }
@@ -201,7 +175,7 @@ function TaskForm() {
                   : taskDetails?.priority === "medium"
                   ? "bg-[#f6d7a9]"
                   : "bg-[#e49090]"
-              }  rounded-md text-sm  py-1 font-normal ml-10`}
+              }  rounded-md text-sm  py-1 font-normal ml-10 cursor-pointer`}
               onChange={(e) =>
                 setTaskDetails((prev) => ({
                   ...prev,
@@ -305,7 +279,7 @@ function TaskForm() {
           {currentTask && (
             <MdDeleteOutline
               className="m-2 text-[#626262] cursor-pointer"
-              onClick={handleTaskDeletion}
+              onClick={(e) => handleTaskStatus(e, "delete")}
               size={20}
             />
           )}
@@ -313,7 +287,7 @@ function TaskForm() {
             type="submit"
             form="task-form"
             className="form-submit-btn h-8 w-20 text-xs rounded-lg flex items-center justify-center bg-blue-800 text-[#f2f2f2] hover:bg-blue-900  text-center font-medium"
-            onClick={handleTaskUpdation}
+            onClick={(e) => handleTaskStatus(e)}
           >
             {showLoader ? <span className="loader"></span> : "Done"}
           </button>

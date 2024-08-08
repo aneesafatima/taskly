@@ -29,7 +29,8 @@ function auth() {
     setPasswordDetails,
     showLoader,
     setShowLoader,
-    seTGiveAccess
+    seTGiveAccess,
+    setShowErr
   } = useContext(GlobalState);
 
   const navigate = useNavigate();
@@ -51,6 +52,8 @@ function auth() {
       if (res.data?.status === "success") {
         setShowLoader(false);
         seTGiveAccess(true)
+        setShowErr(false);
+       
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
