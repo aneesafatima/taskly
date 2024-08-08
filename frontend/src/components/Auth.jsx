@@ -10,12 +10,9 @@ import { CiLock } from "react-icons/ci";
 import { PiPasswordLight } from "react-icons/pi";
 import { SiTask } from "react-icons/si";
 
-
 import { GlobalState } from "../context/GlobalState";
 
 function auth() {
-  
-
   //<a href="https://www.flaticon.com/free-icons/task" title="task icons">Task icons created by AmruID - Flaticon</a>
 
   const {
@@ -30,7 +27,7 @@ function auth() {
     showLoader,
     setShowLoader,
     seTGiveAccess,
-    setShowErr
+    setShowErr,
   } = useContext(GlobalState);
 
   const navigate = useNavigate();
@@ -51,14 +48,14 @@ function auth() {
       );
       if (res.data?.status === "success") {
         setShowLoader(false);
-        seTGiveAccess(true)
+        seTGiveAccess(true);
         setShowErr(false);
-       
+
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
       setErrMessage(err.response.data.message);
-      setTimeout(() => setErrMessage(""), 2000)
+      setTimeout(() => setErrMessage(""), 2000);
       setShowLoader(false);
     }
   };
@@ -68,14 +65,18 @@ function auth() {
   };
 
   return (
-    <div className="p-3  rounded-lg flex items-center h-screen space-x-5">
-      <img src={coverPng} alt="cover img" className="w-[70%] rounded-lg" />
-      <div className="right-section w-full h-fit relative">
-        <h1 className="font-roboto font-bold text-center w-full text-lg absolute bottom-[110%]">
+    <div className="p-3 rounded-lg lg:flex lg:items-center  h-screen  w-full overflow-hidden  lg:space-x-5">
+      <img
+        src={coverPng}
+        alt="cover img"
+        className="lg:w-[70%] h-full rounded-lg object-cover 2xl:object-none "
+      />
+      <div className="right-section flex-grow h-fit  w-[295px] sm:w-80 md:w-96 rounded-lg p-5 lg:p-0 lg:rounded-none lg:h-fit lg:w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:top-0 lg:left-0 lg:translate-x-0 lg:translate-y-0 bg-white lg:bg-transparent lg:relative">
+        <h1 className="font-roboto font-bold text-center w-full text-lg mb-2 lg:mb-0 lg:absolute bottom-[108%] ">
           <SiTask className="inline" /> Taskly
         </h1>
 
-        <h2 className="font-roboto font-light mb-2 text-lg text-center tracking-wide">
+        <h2 className="font-roboto font-light mb-2  text-center tracking-wide text-sm sm:text-lg ">
           {authStatus === "signup" ? "Lets join with us" : "Welcome Back"}
         </h2>
         <form
@@ -83,7 +84,7 @@ function auth() {
           onSubmit={handleFormSubmission}
         >
           {authStatus === "signup" && (
-            <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm ">
+            <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center py-2 px-3 sm:px-5 sm:py-3 space-x-3  text-xs sm:text-sm ">
               <CiUser size={18} color="black" className="thick-stroke" />
               <input
                 type="name"
@@ -100,7 +101,7 @@ function auth() {
               <MdCancel size={17} fill="red" className="cross " />
             </div>
           )}
-          <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm ">
+          <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center py-2 px-3 sm:px-5 sm:py-3 space-x-3 text-xs sm:text-sm ">
             <IoMailOutline size={18} color="black" />
             <input
               type="email"
@@ -116,7 +117,7 @@ function auth() {
             <MdCancel size={17} fill="red" className="cross " />
           </div>
 
-          <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg focus:border-2 focus:border-blue-500  flex items-center px-5 py-3 space-x-3 text-sm">
+          <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg focus:border-2 focus:border-blue-500  flex items-center py-2 px-3 sm:px-5 sm:py-3 3 space-x-3 text-xs sm:text-sm">
             <PiPasswordLight size={18} color="black" className="thick-stroke" />
             <input
               type="password"
@@ -136,7 +137,7 @@ function auth() {
             <MdCancel size={17} fill="red" className="cross " />
           </div>
           {authStatus === "signup" && (
-            <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center px-5 py-3 space-x-3 text-sm">
+            <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center py-2 px-3 sm:px-5 sm:py-3  space-x-3 text-xs sm:text-sm">
               <CiLock size={18} color="black" className="thick-stroke" />
               <input
                 type="password"
@@ -158,12 +159,12 @@ function auth() {
               <MdCancel size={17} fill="red" className="cross " />
             </div>
           )}
-          <span className="text-red-600 font-lato font-bold text-sm text-center">
+          <span className="text-red-600 font-lato font-bold text-xs sm:text-sm text-center">
             {errMessage}
           </span>
           <button
             type="submit"
-            className="py-4 text-sm rounded-lg bg-blue-800 text-[#f2f2f2] hover:bg-blue-900"
+            className="py-3  sm:py-4   rounded-lg bg-blue-800 text-[#f2f2f2] hover:bg-blue-900 text-xs sm:text-sm "
           >
             {authStatus === "signup" ? "Sign Up" : "Log In"}
           </button>
@@ -171,7 +172,7 @@ function auth() {
         <div className="flex items-center mt-5">
           <div className="block border-b-[1px] w-full border-[#e2e2e2]"></div>
           <div
-            className="text-xs font-lato w-[70%] mx-1 text-[#8f8f8f] cursor-pointer hover:underline"
+            className=" font-lato w-[70%] mx-1 text-[#8f8f8f] cursor-pointer hover:underline text-[8px] sm:text-xs "
             onClick={changeAuthStatus}
           >
             {!showLoader ? (
