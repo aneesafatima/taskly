@@ -44,11 +44,9 @@ function TaskForm() {
       try {
         const res = await axios({
           url:
-            feature === "delete"
-              ? `http://localhost:3000/api/tasks/${currentTask._id}`
-              : currentTask
-              ? `http://localhost:3000/api/tasks/${currentTask._id}`
-              : "http://localhost:3000/api/tasks/",
+            feature === "delete" || currentTask
+              ? `${import.meta.env.VITE_URL}/api/tasks/${currentTask._id}`
+              : `${import.meta.env.VITE_URL}/api/tasks/`,
           method:
             feature === "delete" ? "DELETE" : currentTask ? "PATCH" : "POST",
           data: feature === "delete" ? undefined : { ...taskDetails, tags },

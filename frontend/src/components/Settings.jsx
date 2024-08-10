@@ -32,7 +32,7 @@ function Settings() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get("http://localhost:3000/api/settings", {
+        const res = await axios.get(`${import.meta.env.VITE_URL}/api/settings`, {
           withCredentials: true,
         });
 
@@ -56,8 +56,8 @@ function Settings() {
       const res = await axios({
         url:
           type === "password"
-            ? "http://localhost:3000/api/users/updateMyPassword"
-            : "http://localhost:3000/api/users/updateMe",
+            ? `${import.meta.env.VITE_URL}/api/users/updateMyPassword`
+            : `${import.meta.env.VITE_URL}/api/users/updateMe`,
         method: "PATCH",
         data,
         withCredentials: true,
@@ -89,8 +89,8 @@ function Settings() {
       const res = await axios({
         url:
           feature === "logout"
-            ? "http://localhost:3000/api/users/logout"
-            : `http://localhost:3000/api/users/deleteMe/${user._id}`,
+            ? `${import.meta.env.VITE_URL}/api/users/logout`
+            : `${import.meta.env.VITE_URL}/api/users/deleteMe/${user._id}`,
         method: feature === "logout" ? "GET" : "DELETE",
         withCredentials: true,
       });

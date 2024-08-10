@@ -20,7 +20,7 @@ function dashboard() {
     if (refetch) {
       async function fetchData() {
         try {
-          const res = await axios.get("http://localhost:3000/api/dashboard", {
+          const res = await axios.get(`${import.meta.env.VITE_URL}/api/dashboard`, {
             withCredentials: true,
           });
 

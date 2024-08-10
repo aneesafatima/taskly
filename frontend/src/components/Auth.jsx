@@ -35,12 +35,12 @@ function auth() {
   const handleFormSubmission = async (e) => {
     e.preventDefault();
     try {
-      setShowLoader(true);
+      setShowLoader({status: true, feature: "auth"});
 
       const res = await axios.post(
         authStatus === "signup"
-          ? "http://localhost:3000/api/users/signup"
-          : "http://localhost:3000/api/users/login",
+          ? `${import.meta.env.VITE_URL}/api/users/signup`
+          : `${import.meta.env.VITE_URL}/api/users/login`,
         { ...userDetails, ...passwordDetails },
         {
           withCredentials: true, // Include credentials in the request
@@ -166,7 +166,7 @@ function auth() {
             type="submit"
             className="py-3  sm:py-4   rounded-lg bg-blue-800 text-[#f2f2f2] hover:bg-blue-900 text-xs sm:text-sm "
           >
-            {authStatus === "signup" ? "Sign Up" : "Log In"}
+            { showLoader.status === true && showLoader.feature === "auth" ?  <span className="loader"></span>  :  ( authStatus === "signup" ? "Sign Up" : "Log In")}
           </button>
         </form>
         <div className="flex items-center mt-5">
