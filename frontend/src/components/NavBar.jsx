@@ -11,9 +11,9 @@ import { RiMenu5Fill } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
 
 function NavBar({ active }) {
-  const { user, mode, setMode } = useContext(GlobalState);
-  const [showNavBar, setShowNavBar] = useState(window.innerWidth >= 768);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { user, mode, setMode, showNavBar, setShowNavBar, windowWidth, setWindowWidth } = useContext(GlobalState);
+  
+ 
 
   useEffect(() => {
     const handleResize = () => {

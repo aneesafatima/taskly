@@ -7,12 +7,12 @@ import { GlobalState } from "./context/GlobalState";
 function App() {
   const location = useLocation();
   const [active, setActive] = useState();
-  const { giveAccess, refetch } = useContext(GlobalState);
+  const { giveAccess, refetch ,showNavBar, windowWidth } = useContext(GlobalState);
   useEffect(() => {
     setActive(location.pathname), [location.pathname];
   });
 
-  const showNavBar =
+  const displayNavBar =
     location.pathname === "/dashboard" || location.pathname === "/settings";
 
   if (
@@ -29,8 +29,13 @@ function App() {
     );
 
   return (
-    <div className="flex min-h-screen">
-      {showNavBar && <NavBar active={active} />}
+    <div className={`flex  ${
+          showNavBar && windowWidth <= 768
+          ? "h-screen overflow-y-hidden"
+          : " min-h-svh "
+        } `}>
+     
+      {displayNavBar && <NavBar active={active} />}
 
       <Routes>
         <Route path="/" element={<Auth />} />

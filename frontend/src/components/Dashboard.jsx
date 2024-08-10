@@ -5,8 +5,6 @@ import { ErrComponent, TaskDetail, Tasks } from ".";
 import { GlobalState } from "../context/GlobalState";
 
 function dashboard() {
-  //add loader
-
   const {
     giveAccess,
     seTGiveAccess,
@@ -18,7 +16,6 @@ function dashboard() {
     showErr,
   } = useContext(GlobalState);
 
-  
   useEffect(() => {
     if (refetch) {
       async function fetchData() {
@@ -31,11 +28,10 @@ function dashboard() {
             seTGiveAccess(true);
             setUser(res.data.user);
             setTasks(res.data.tasks);
-            setShowErr(false)
+            setShowErr(false);
           }
         } catch (err) {
-          setShowErr({status:true, message: err.message})
-          
+          setShowErr({ status: true, message: err.message });
         }
         setRefetch(false);
       }
@@ -44,14 +40,18 @@ function dashboard() {
   }, [refetch]);
 
   if (showErr.status) return <ErrComponent message={showErr.message} />;
-  if(refetch){
-    return <div className="flex items-center justify-center w-full"><span class="main-loader"></span> </div>
+  if (refetch) {
+    return (
+      <div className="flex items-center justify-center w-full h-svh">
+        <span class="main-loader"></span>{" "}
+      </div>
+    );
   }
 
   return (
     giveAccess &&
     !refetch && (
-      <div className="lg:flex w-screen min-h-svh space-y-3 ">
+      <div className={`lg:flex w-screen  space-y-3 lg:space-y-0 `}>
         <Tasks />
         <TaskDetail />
       </div>

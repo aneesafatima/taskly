@@ -15,7 +15,13 @@ mongoose
 
 console.log(process.env.NODE_ENV);
 
-const server = app.listen(process.env.PORT, () => {
-  //listening for requests to the specified portr
-  console.log("Listening...");
-}); //this returns a server
+
+module.exports = (req, res) => {
+  // Delegate request handling to the Express app
+  app(req, res); // This works because `app` is a function that Express set up to handle requests
+};
+
+// const server = app.listen(process.env.PORT, () => {
+//   //listening for requests to the specified port
+//   console.log("Listening...");
+// }); //this returns a server

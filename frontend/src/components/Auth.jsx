@@ -54,7 +54,7 @@ function auth() {
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
-      setErrMessage(err.response.data.message);
+      setErrMessage(err.response?.data.message);
       setTimeout(() => setErrMessage(""), 2000);
       setShowLoader(false);
     }

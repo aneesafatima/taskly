@@ -111,7 +111,7 @@ function Settings() {
   return (
     giveAccess && (
       <div
-        className="flex-grow px-10 sm:px-28 py-5 h-screen overflow-y-scroll scrollbar"
+        className="flex-grow px-10 sm:px-28 py-5 h-svh overflow-y-scroll "
         id="settings"
       >
         <HiUserCircle size={150} className="text-priority-color" />

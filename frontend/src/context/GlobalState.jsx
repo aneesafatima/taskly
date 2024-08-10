@@ -17,7 +17,8 @@ export function GlobalProvider({ children }) {
   const [passwordDetails, setPasswordDetails] = useState({});
   const [showLoader, setShowLoader] = useState(false);
   const [showErr, setShowErr] = useState(false);
-
+  const [showNavBar, setShowNavBar] = useState(window.innerWidth >= 768);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   return (
     <GlobalState.Provider
       value={{
@@ -47,6 +48,10 @@ export function GlobalProvider({ children }) {
         setShowLoader,
         showErr,
         setShowErr,
+        windowWidth,
+        setWindowWidth,
+        showNavBar,
+        setShowNavBar,
       }}
     >
       {children}
