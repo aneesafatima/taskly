@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:prod": "cross-env VITE_URL=https://taskly-beryl.vercel.app/ vite",
-    "build": "vite build",
+    "build": "VITE_URL=https://taskly-beryl.vercel.app/ vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
