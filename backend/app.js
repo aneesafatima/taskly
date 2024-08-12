@@ -31,26 +31,29 @@ app.use("/api/users", userRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/tasks", taskRouter);
 app.use("/api/settings", settingsRouter);
-app.use("*", (req,res) => {
-res.status(404).json({
-    message: "Not Found"
-})
-})
+app.use("*", (req, res) => {
+  res.status(404).json({
+    message: "Not Found",
+  });
+});
 app.use(errorController);
+
 
 mongoose
   .connect(DB, {})
-  .then(() => console.log("SUCCESSFULLY CONNECTED TO DATABASE"))
+  .then(() => {
+    console.log("Mongodb connected");
+    const server = http.createServer(app);
+    if (process.env.NODE_ENV === "development") {
+      server.listen(process.env.PORT, () => {
+        console.log(`Server is listening on port ${port}`);
+      });
+    }
+  })
   .catch((err) => {
     console.error("DATABASE CONNECTION ERROR:", err);
     process.exit(1); //appication halting with an error
   });
-  
-  if (process.env.NODE_ENV === "development") {
-    const server = app.listen(process.env.PORT, () => {
-      //listening for requests to the specified port
-      console.log("Listening...");
-    }); //this returns a server
-  }
 
 module.exports = app;
+ 
