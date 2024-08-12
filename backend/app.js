@@ -19,10 +19,10 @@ app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api/users", userRouter);
-app.use("/api/dashboard", dashboardRouter);
-app.use("/api/tasks", taskRouter);
-app.use("/api/settings", settingsRouter);
+app.use("/users", userRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/tasks", taskRouter);
+app.use("/settings", settingsRouter);
 app.use(errorController);
 
 module.exports = app;
