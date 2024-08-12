@@ -5,9 +5,9 @@ const {
   updateTask,
   deleteTask,
   updateTasksOrder,
-} = require("../controllers/taskController");
+} = require("../src/controllers/taskController");
 
-const { protect } = require("../controllers/authController");
+const { protect } = require("../src/controllers/authController");
 
 const taskRouter = express.Router();
 
