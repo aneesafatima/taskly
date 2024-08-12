@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const http = require("http");
 dotenv.config({ path: "./.env" });
 
 const DB = process.env.DB_CONNECTION_STRING.replace(
@@ -11,7 +12,7 @@ const DB = process.env.DB_CONNECTION_STRING.replace(
 const userRouter = require("./routes/userRouter");
 const taskRouter = require("./routes/taskRouter");
 const dashboardRouter = require("./routes/dashboardRouter");
-const errorController = require("./controllers/errorController");
+const errorController = require("./src/controllers/errorController");
 const app = express(); //app is an instance of express
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -38,7 +39,6 @@ app.use("*", (req, res) => {
 });
 app.use(errorController);
 
-
 mongoose
   .connect(DB, {})
   .then(() => {
@@ -46,7 +46,7 @@ mongoose
     const server = http.createServer(app);
     if (process.env.NODE_ENV === "development") {
       server.listen(process.env.PORT, () => {
-        console.log(`Server is listening on port ${port}`);
+        console.log(`Server is listening on port ${process.env.PORT}`);
       });
     }
   })
@@ -56,4 +56,3 @@ mongoose
   });
 
 module.exports = app;
- 

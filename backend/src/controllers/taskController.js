@@ -1,5 +1,5 @@
-const Task = require("../models/taskModel");
-const catchAsync = require("../utils/catchAsync");
+const Task = require("../../models/taskModel");
+const catchAsync = require("../../utils/catchAsync");
 
 exports.getAllTasks = catchAsync(async (req, res, next) => {
   const todo = await Task.find({ user: req.user, status: "todo" }).sort({

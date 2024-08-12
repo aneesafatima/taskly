@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
-const ErrorHandler = require("../utils/ErrorHandler");
+const User = require("../../models/userModel");
+const ErrorHandler = require("../../utils/ErrorHandler");
 const { promisify } = require("util");
-const catchAsync = require("../utils/catchAsync");
+const catchAsync = require("../../utils/catchAsync");
 
 const sendToken = (user, statusCode, res) => {
   const token = createSendToken(user._id);
@@ -105,7 +105,7 @@ exports.updateMyPassword = catchAsync(async (req, res, next) => {
     return next(new ErrorHandler("Invalid password", 400));
   //add a middleware to set a passwordChangedAt date
 
-  console.log("correct")
+  console.log("correct");
   user.password = newPassword;
   user.passwordConfirm = passwordConfirm;
   await user.save(); //validators for all the fields are run
@@ -149,6 +149,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   console.log(userId);
   await User.findByIdAndDelete(userId);
   res.status(204).json({
-    status: "success"
+    status: "success",
   });
 });
