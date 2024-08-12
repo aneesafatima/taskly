@@ -23,6 +23,11 @@ app.use("/users", userRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/tasks", taskRouter);
 app.use("/settings", settingsRouter);
+app.use("*", (res,req) => {
+res.status(404).json({
+    message: "Not Found"
+})
+})
 app.use(errorController);
 
 module.exports = app;
