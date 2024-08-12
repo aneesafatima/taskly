@@ -1,4 +1,6 @@
 {
+  "buildCommand": "npm run build --prefix frontend",
+  "installCommand": "npm install --prefix frontend && npm install --prefix backend",
   "builds": [
     {
       "src": "frontend/package.json",
@@ -9,11 +11,12 @@
     },
     {
       "src": "backend/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "nodeVersion": "20.x"
+      }
     }
   ],
-  "buildCommand": "npm run build --prefix frontend",
-  "installCommand": "npm install --prefix frontend && npm install --prefix backend",
   "routes": [
     {
       "src": "/api/(.*)",
