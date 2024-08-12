@@ -3,14 +3,14 @@
   "installCommand": "npm install --prefix frontend && npm install --prefix backend",
   "builds": [
     {
-      "src": "/frontend/package.json",
+      "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "/frontend/dist"
+        "distDir": "frontend/dist"
       }
     },
     {
-      "src": "/backend/server.js",
+      "src": "backend/server.js",
       "use": "@vercel/node",
       "config": {
         "nodeVersion": "20.x"
@@ -19,12 +19,8 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/backend/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/dist/index.html"
+      "src": "api/(.*)",
+      "dest": "backend/server.js"
     }
   ]
 }
