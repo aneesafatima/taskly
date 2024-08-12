@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "taskly backend",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
-    "start:prod": "cross-env NODE_ENV=production && nodemon app.js"
+    "start": "nodemon index.js",
+    "start:prod": "cross-env NODE_ENV=production && nodemon index.js"
   },
   "author": "",
   "license": "ISC",
