@@ -17,12 +17,12 @@ const app = express(); //app is an instance of express
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const settingsRouter = require("./routes/settingsRouter");
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173", // Allow requests from this origin
-//     credentials: true, // Allows credentials (cookies) to be sent
-//   })
-// );
+app.use(
+  cors({
+    origin: "https://taskly-frontend-omega.vercel.app/", // Allow requests from this origin
+    credentials: true, // Allows credentials (cookies) to be sent
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
