@@ -20,6 +20,7 @@ const settingsRouter = require("./routes/settingsRouter");
 app.use(
   cors({
     origin: ["https://taskly-frontend-omega.vercel.app", "http://localhost:5173"], // Allow requests from this origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     credentials: true, // Allows credentials (cookies) to be sent
   })
 );
