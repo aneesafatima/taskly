@@ -23,10 +23,10 @@ app.use(
     credentials: true, // Allows credentials (cookies) to be sent
   })
 );
-app.options('*', cors({
-  origin: ["https://taskly-frontend-omega.vercel.app", "http://localhost:5173"],
-  credentials: true
-}));
+// app.options('*', cors({
+//   origin: ["https://taskly-frontend-omega.vercel.app", "http://localhost:5173"],
+//   credentials: true
+// }));
 app.use(express.json());
 app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
