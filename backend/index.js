@@ -18,7 +18,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const settingsRouter = require("./routes/settingsRouter");
 app.use(cors());
-app.options("*", cors());
 app.use(express.json());
 app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
