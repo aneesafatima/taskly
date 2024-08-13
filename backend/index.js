@@ -19,7 +19,7 @@ const cookieParser = require("cookie-parser");
 const settingsRouter = require("./routes/settingsRouter");
 app.use(
   cors({
-    origin: "https://taskly-frontend-omega.vercel.app", // Allow requests from this origin
+    origin: ["https://taskly-frontend-omega.vercel.app", "http://localhost:5173"], // Allow requests from this origin
     credentials: true, // Allows credentials (cookies) to be sent
   })
 );
