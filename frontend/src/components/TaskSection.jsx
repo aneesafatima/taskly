@@ -34,7 +34,7 @@ function TaskSection({ array, gradient, id }) {
             strategy={verticalListSortingStrategy}
           >
             {array?.map((el, i) => (
-              <TaskCard task={el} id={el._id} section={id} />
+              <TaskCard task={el} id={el._id} section={id} key={i} />
             ))}
           </SortableContext>
         </ul>

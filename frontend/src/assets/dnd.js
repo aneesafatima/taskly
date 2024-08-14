@@ -50,6 +50,7 @@ const getIndex = (tasks, type, id, container) => {
         }));
 
         setData({
+          section: overData.section,
           array: [...updatedArray],
         });
       } else if (activeData.section !== overData.section) {
@@ -58,7 +59,7 @@ const getIndex = (tasks, type, id, container) => {
 
         const [removedItem] = activeContainer.splice(activeIndex, 1);
         overContainer.splice(overIndex, 0, removedItem);
-
+       console.log(overData.section)
         setTasks((prev) => ({
           ...prev,
           [activeData.section]: [...activeContainer],
@@ -80,7 +81,7 @@ const getIndex = (tasks, type, id, container) => {
       activeIndex !== -1
     ) {
       //For sorting task over another container
-
+      console.log("Task in separate empty container")
       const [removedItem] = activeContainer.splice(activeIndex, 1);
       overContainer.push(removedItem);
 
@@ -101,7 +102,7 @@ const getIndex = (tasks, type, id, container) => {
     if (data) {
       try {
         await axios.patch(
-          "http://localhost:3000/api/tasks/updateOrder",
+          `${import.meta.env.VITE_URL}/api/tasks/updateOrder`,
           { data },
           { withCredentials: true }
         );
