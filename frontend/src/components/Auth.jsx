@@ -87,11 +87,11 @@ function auth() {
         >
           {authStatus === "signup" && (
             <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center py-2 px-3 sm:px-5 sm:py-3 space-x-3  text-xs sm:text-sm ">
-              <CiUser size={18} color="black" className="thick-stroke" />
+              <CiUser size={18}  className="thick-stroke text-priority-color" />
               <input
                 type="name"
                 name="name"
-                className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0 "
+                className="mode-items h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-border-color bg-transparent outline-none border-0 "
                 placeholder="Enter your name"
                 onChange={(e) =>
                   setUserDetails((prev) => ({ ...prev, name: e.target.value }))
@@ -104,11 +104,11 @@ function auth() {
             </div>
           )}
           <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center py-2 px-3 sm:px-5 sm:py-3 space-x-3 text-xs sm:text-sm ">
-            <IoMailOutline size={18} color="black" />
+            <IoMailOutline size={18}  className="text-priority-color" />
             <input
               type="email"
               name="email"
-              className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
+              className="mode-items h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-border-color bg-transparent outline-none border-0"
               placeholder="Enter your email"
               onChange={(e) =>
                 setUserDetails((prev) => ({ ...prev, email: e.target.value }))
@@ -120,7 +120,7 @@ function auth() {
           </div>
 
           <div className="form-item border-[1px] border-[#e2e2e2] rounded-lg focus:border-2 focus:border-blue-500  flex items-center py-2 px-3 sm:px-5 sm:py-3 3 space-x-3 text-xs sm:text-sm">
-            <PiPasswordLight size={18} color="black" className="thick-stroke" />
+            <PiPasswordLight size={18}  className="thick-stroke text-priority-color" />
             <input
               type="password"
               name="password"
@@ -132,7 +132,7 @@ function auth() {
                   password: e.target.value,
                 }))
               }
-              className=" h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
+              className="mode-items h-full w-full font-roboto  p-1 px-4 border-l-[1px] border-border-color bg-transparent outline-none border-0"
               required
             />
             <FaCircleCheck fill="green" className="check " />
@@ -140,11 +140,11 @@ function auth() {
           </div>
           {authStatus === "signup" && (
             <div className="form-item border-[1px] border-[#e2e2e2] focus:border-2 focus:border-blue-500 rounded-lg  flex items-center py-2 px-3 sm:px-5 sm:py-3  space-x-3 text-xs sm:text-sm">
-              <CiLock size={18} color="black" className="thick-stroke" />
+              <CiLock size={18}  className="thick-stroke text-priority-color" />
               <input
                 type="password"
                 name="passwordConfirm"
-                className="w-full h-full font-roboto p-1 px-4 border-l-[1px] border-[#e2e2e2] bg-transparent outline-none border-0"
+                className="mode-items  w-full h-full font-roboto p-1 px-4 border-l-[1px] border-border-color bg-transparent outline-none border-0"
                 placeholder="Confirm your password"
                 minLength={8}
                 onChange={(e) =>
