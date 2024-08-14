@@ -28,6 +28,7 @@ function auth() {
     setShowLoader,
     seTGiveAccess,
     setShowErr,
+    setUser,
   } = useContext(GlobalState);
 
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ function auth() {
   const handleFormSubmission = async (e) => {
     e.preventDefault();
     try {
-      setShowLoader({status: true, feature: "auth"});
+      setShowLoader({ status: true, feature: "auth" });
 
       const res = await axios.post(
         authStatus === "signup"
@@ -50,6 +51,7 @@ function auth() {
         setShowLoader(false);
         seTGiveAccess(true);
         setShowErr(false);
+        setUser(res.data.user);
 
         navigate("/dashboard", { replace: true });
       }
@@ -166,24 +168,22 @@ function auth() {
             type="submit"
             className="py-3  sm:py-4   rounded-lg bg-blue-800 text-[#f2f2f2] hover:bg-blue-900 text-xs sm:text-sm "
           >
-            { showLoader.status === true && showLoader.feature === "auth" ?  <span className="loader"></span>  :  ( authStatus === "signup" ? "Sign Up" : "Log In")}
+            {showLoader.status === true && showLoader.feature === "auth" ? (
+              <span className="loader"></span>
+            ) : authStatus === "signup" ? (
+              "Sign Up"
+            ) : (
+              "Log In"
+            )}
           </button>
         </form>
         <div className="flex items-center mt-5">
           <div className="block border-b-[1px] w-full border-[#e2e2e2]"></div>
           <div
-            className=" font-lato w-[70%] mx-1 text-[#8f8f8f] cursor-pointer hover:underline text-[8px] sm:text-xs "
+            className=" font-lato w-fit text-nowrap mx-1 text-[#8f8f8f] cursor-pointer hover:underline text-[8px] sm:text-xs "
             onClick={changeAuthStatus}
           >
-            {!showLoader ? (
-              authStatus === "signup" ? (
-                "Have an account"
-              ) : (
-                "Create Account"
-              )
-            ) : (
-              <span className="loader"></span>
-            )}
+            {authStatus === "signup" ? "Have an account" : "Create Account"}
           </div>
           <div className="block border-b-[1px] w-full border-[#e2e2e2]"></div>
         </div>
