@@ -39,7 +39,7 @@
 - **Tailwind CSS**
 
 ## 📝 Process
-I started by listing the essential features I wanted in a task manager, drawing inspiration from popular tools like Trello and Asana. The development process began with setting up the backend using Node.js, Express, and MongoDB to handle user authentication and task management.
+I started by listing the essential features I wanted in a task manager, drawing inspiration from popular tools like Trello and Notion. The development process began with setting up the backend using Node.js, Express, and MongoDB to handle user authentication and task management.
 
 Once the backend was ready, I moved on to setting up Vite for the frontend and integrating it with React and JavaScript. I focused on creating a user-friendly dashboard that allowed easy task management with drag-and-drop functionality. The styling was handled using Tailwind CSS, making the interface clean and responsive.
 
