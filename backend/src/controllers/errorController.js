@@ -27,15 +27,15 @@ const validationError = (err) => {
   return new ErrorHandler(`Invalid Input data: ${errors[0]}`, 400);
 };
 const duplicateErrors = () => {
-  console.log("Entered duplicate");
+ 
   return new ErrorHandler("This email is taken !", 400);
 };
 
 module.exports = (err, req, res, next) => {
   console.log(err);
   err.statusCode = err.statusCode || 500;
-  err.status = err.message || "error";
-  //err.status
+  err.status = err.status || "error";
+  
   if (process.env.NODE_ENV === "production") {
     let error = { ...err };
     if (err.name === "ValidationError") {

@@ -16,6 +16,7 @@ const sendToken = (user, statusCode, res) => {
     httpOnly: true,
     path: "/",
   });
+  
   res.status(statusCode).json({
     status: "success",
     token,
