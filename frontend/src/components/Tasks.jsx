@@ -42,7 +42,7 @@ function Tasks() {
 
   return (
 
-    <section className="tasks w-screen lg:w-[680px]  md:w-full  px-2 cursor-default sm:mx-2 scrollbar">
+    <section className="tasks min-h-svh w-screen lg:w-[680px]  md:w-full  px-2 cursor-default sm:mx-2 scrollbar">
       <h2 className="font-lato font-bold text-xl md:text-3xl mode-items m-6 mt-[38px] ml-[38px] md:ml-0 md:mt-6 ">
         Tackle Today, Triumph Tomorrow.
       </h2>
