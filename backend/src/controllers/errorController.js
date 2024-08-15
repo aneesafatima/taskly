@@ -24,13 +24,14 @@ const errorDev = (err, res) => {
 
 const validationError = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
-  return new ErrorHandler(`Invalid Input data: ${errors[0]}`, 400);
+  return new ErrorHandler(`${errors[0]}`, 400);
 };
 const duplicateErrors = () => {
   return new ErrorHandler("This email is taken !", 400);
 };
 
 module.exports = (err, req, res, next) => {
+  console.log(err)
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -39,6 +40,7 @@ module.exports = (err, req, res, next) => {
     error.message = err.message;
     if (err.name === "ValidationError") {
       error = validationError(err);
+      
     }
     if (err.code === 11000) error = duplicateErrors();
 

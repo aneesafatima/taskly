@@ -59,6 +59,7 @@ function TaskForm() {
           setCurrentTask("");
         }
       } catch (err) {
+        console.log(err)
         showAlert(err.response.data?.message, "task-form");
         setShowLoader(false);
       }
