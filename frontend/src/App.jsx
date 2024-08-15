@@ -31,13 +31,7 @@ function App() {
       />
     );
 
-  useEffect(() => {
-    const fetch = async () => {
-      const res = await axios.get(`${import.meta.env.VITE_URL}`);
-      console.log(res)
-    };
-    fetch();
-  },[]);
+
 
   return (
     <div

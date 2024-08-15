@@ -56,6 +56,7 @@ function auth() {
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
+      console.log(err)
       setErrMessage(err.response?.data.message);
       setTimeout(() => setErrMessage(""), 2000);
       setShowLoader(false);
