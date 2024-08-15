@@ -24,7 +24,7 @@ app.use(
         "https://taskly-frontend-omega.vercel.app",
         "http://localhost:5173",
       ], // Your frontend origin
-      methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
       credentials: true,
     } // Allows credentials (cookies) to be sent
   )
