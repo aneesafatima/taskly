@@ -44,7 +44,7 @@ function dashboard() {
   if (refetch) {
     return (
       <div className="flex items-center justify-center w-full h-svh">
-        <span class="main-loader"></span>{" "}
+        <span className="main-loader"></span>{" "}
       </div>
     );
   }
