@@ -49,7 +49,7 @@ function Tasks() {
       <DndContext
         onDragStart={(event) => handleDragStart(event,setAddTask, setActive, tasks)}
         onDragMove={(event) => onHandleMove(event, setData, setTasks,tasks, arrayMove)}
-        onDragEnd={(event) => handleDragEnd(event, setActive, data)}
+        onDragEnd={() => handleDragEnd(setActive, data)}
         collisionDetection={closestCorners}
         sensors={sensors}
       >

@@ -101,7 +101,8 @@ const getIndex = (tasks, type, id, container) => {
     }
   };
  export const handleDragEnd = async (setActive, data) => {
-
+setActive(null)
+console.log(data)
     if (data) {
       try {
         await axios.patch(
