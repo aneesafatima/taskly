@@ -10,14 +10,12 @@ const sendToken = (user, statusCode, res) => {
   res.cookie("jwt", token, {
     expires: new Date(
       Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ), //this property expects a date object
+    ),
     secure: process.env.NODE_ENV === "development" ? false : true,
+    sameSite: process.env.NODE_ENV === "development" ? "Strict" : "None",
+    httpOnly: true,
     path: "/",
-    sameSite:"None",
-    //only when in dev mode send the cookie over http otherwise https
-    httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
   });
-
   res.status(statusCode).json({
     status: "success",
     token,
