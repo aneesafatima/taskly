@@ -53,7 +53,7 @@ function Tasks() {
         collisionDetection={closestCorners}
         sensors={sensors}
       >
-        <div className="flex h-fit px-4 xs:px-0 sm:h-[85vh] flex-wrap xs:flex-nowrap  sm:space-x-2 space-y-4 sm:space-y-0">
+        <div className="flex h-fit px-4 xs:px-0 sm:h-[85vh] flex-wrap xs:flex-nowrap sm:space-x-2 space-y-4 sm:space-y-0">
           <TaskSection
             array={[...tasks?.todo]}
             gradient="bg-to-do-gradient"
