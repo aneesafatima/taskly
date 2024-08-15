@@ -245,13 +245,14 @@ function TaskForm() {
 
           <ReactTags
             tags={tags}
-            separators={["Enter", "Tab"]}
+            separators={["Enter", "Tab", ",", "Return"]}
             placeholder="add tags"
             handleAddition={handleAddition}
             handleDelete={handleDelete}
             maxTags={4}
             allowDragDrop={false}
           />
+          <span className="text-[10px] text-[#767575] font-roboto">Use , to separate tags on touchscreens.</span>
 
           <textarea
             type="text"
@@ -266,6 +267,7 @@ function TaskForm() {
               }))
             }
           />
+          
         </form>
       </div>
       <div className="text-sm text-[#626262] flex justify-between items-center">
