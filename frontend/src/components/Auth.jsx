@@ -44,7 +44,7 @@ function auth() {
           : `${import.meta.env.VITE_URL}/api/users/login`,
         { ...userDetails, ...passwordDetails },
         {
-          withCredentials: true, // Include credentials in the request
+          withCredentials: true // Include credentials in the request
         }
       );
       if (res.data?.status === "success") {

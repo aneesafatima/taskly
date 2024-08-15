@@ -17,7 +17,7 @@ function dashboard() {
   } = useContext(GlobalState);
 
   useEffect(() => {
-    if (refetch) {
+    // if (refetch) {
       async function fetchData() {
         try {
           const res = await axios.get(`${import.meta.env.VITE_URL}/api/dashboard`, {
@@ -37,8 +37,8 @@ function dashboard() {
         setRefetch(false);
       }
       fetchData();
-    }
-  }, [refetch]);
+    // }
+  }, );
 
   if (showErr.status) return <ErrComponent message={showErr.message} />;
   if (refetch) {

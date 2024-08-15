@@ -24,7 +24,7 @@ app.use(
         "https://taskly-frontend-omega.vercel.app",
         "http://localhost:5173",
       ], // Your frontend origin
-      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+      methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
       credentials: true,
     } // Allows credentials (cookies) to be sent
   )
@@ -35,11 +35,11 @@ app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req,res) => {
+app.get("/", (req, res) => {
   res.status(200).json({
-    status:"success"
-  })
-})
+    status: "success",
+  });
+});
 
 app.use("/api/users", userRouter);
 app.use("/api/dashboard", dashboardRouter);
