@@ -35,6 +35,12 @@ app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get("/", (req,res) => {
+  res.status(200).json({
+    status:"success"
+  })
+})
+
 app.use("/api/users", userRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/tasks", taskRouter);

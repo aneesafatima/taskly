@@ -3,11 +3,13 @@ import { Auth, Dashboard, NavBar, Settings } from "./components";
 import { useContext, useEffect, useState } from "react";
 import { NotFound } from "./components";
 import { GlobalState } from "./context/GlobalState";
+import axios from "axios";
 
 function App() {
   const location = useLocation();
   const [active, setActive] = useState();
-  const { giveAccess, refetch ,showNavBar, windowWidth } = useContext(GlobalState);
+  const { giveAccess, refetch, showNavBar, windowWidth } =
+    useContext(GlobalState);
   useEffect(() => {
     setActive(location.pathname), [location.pathname];
   });
@@ -17,7 +19,8 @@ function App() {
 
   if (
     !giveAccess &&
-    (location.pathname === "/dashboard" || location.pathname === "/settings") && !refetch
+    (location.pathname === "/dashboard" || location.pathname === "/settings") &&
+    !refetch
   )
     return (
       <NotFound
@@ -28,13 +31,22 @@ function App() {
       />
     );
 
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await axios.get(`${import.meta.env.VITE_URL}`);
+      console.log(res)
+    };
+    fetch();
+  },[]);
+
   return (
-    <div className={`flex  ${
-          showNavBar && windowWidth <= 768
+    <div
+      className={`flex  ${
+        showNavBar && windowWidth <= 768
           ? "h-screen overflow-y-hidden"
           : " min-h-svh "
-        } `}>
-     
+      } `}
+    >
       {displayNavBar && <NavBar active={active} />}
 
       <Routes>
