@@ -21,7 +21,7 @@ app.use(
   cors(
     {
       origin: [
-        "https://taskly-frontend-omega.vercel.app",
+        // "https://taskly-frontend-omega.vercel.app",
         "http://localhost:5173",
       ], // Your frontend origin
       // methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
