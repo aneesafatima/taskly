@@ -14,7 +14,7 @@ const errorProd = (err, res) => {
 };
 
 const errorDev = (err, res) => {
-  res.status(err.statusCode).json({
+  return res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
     stack: err.stack,
@@ -43,6 +43,6 @@ module.exports = (err, req, res, next) => {
     }
     if (err.code === 11000) error = duplicateErrors();
 
-    errorProd(error, res);
+    errorProd(err, res);
   } else if (process.env.NODE_ENV === "development") errorDev(err, res);
 };
