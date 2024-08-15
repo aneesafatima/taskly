@@ -13,7 +13,7 @@ const sendToken = (user, statusCode, res) => {
     ), //this property expects a date object
     secure: process.env.NODE_ENV === "development" ? false : true,
     path: "/",
-    sameSite:  process.env.NODE_ENV === "development" ? "Strict" : "None",
+    sameSite:"None",
     //only when in dev mode send the cookie over http otherwise https
     httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
   });
@@ -30,8 +30,6 @@ const createSendToken = (id) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
-
-
 
 const filterObject = (req, ...data) => {
   const filteredObject = {};
@@ -138,6 +136,7 @@ exports.logOut = (req, res) => {
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000), //this property expects a date object
     secure: process.env.NODE_ENV === "development" ? false : true,
+    sameSite: process.env.NODE_ENV === "development" ? "Strict" : "None",
     path: "/",
     //only when in dev mode send the cookie over http otherwise https
     httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
