@@ -63,6 +63,10 @@ While the current version of Taskly is robust and feature-rich, there are severa
 ## 🐛 Current Bugs
 So far, Taskly performs well on the web and on mobile devices. If you encounter any bugs or issues, please let me know!
 
+## Credits 🙏
+- Favicon by Flaticon
+- Cover picture on Auth page from Dribble
+
 ## 🎥 A short Demo
 I couldn't include all the features in this short video, but tried to include the main ones.
 
