@@ -13,6 +13,7 @@ const sendToken = (user, statusCode, res) => {
     ), //this property expects a date object
     secure: process.env.NODE_ENV === "development" ? false : true,
     path: "/",
+    SameSite:"None",
     //only when in dev mode send the cookie over http otherwise https
     httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
   });
