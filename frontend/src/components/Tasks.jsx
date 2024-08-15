@@ -20,9 +20,10 @@ import DragOverlayCard from "./DragOverlayCard";
 import { onHandleMove, handleDragEnd, handleDragStart } from "../assets/dnd";
 
 function Tasks() {
-  const { tasks, setTasks } = useContext(GlobalState);
+  const { tasks, setTasks, setAddTask } = useContext(GlobalState);
   const [active, setActive] = useState();
   const [data, setData] = useState();
+  
 
   const touchSensor = useSensor(TouchSensor, {
     // Press delay of 250ms, with tolerance of 5px of movement
@@ -40,14 +41,15 @@ function Tasks() {
   );
 
   return (
+
     <section className="tasks w-screen lg:w-[680px]  md:w-full  px-2 cursor-default sm:mx-2 scrollbar">
       <h2 className="font-lato font-bold text-xl md:text-3xl mode-items m-6 mt-[38px] ml-[38px] md:ml-0 md:mt-6 ">
         Tackle Today, Triumph Tomorrow.
       </h2>
       <DndContext
-        onDragStart={(event) => handleDragStart(event, setActive, tasks)}
+        onDragStart={(event) => handleDragStart(event,setAddTask, setActive, tasks)}
         onDragMove={(event) => onHandleMove(event, setData, setTasks,tasks, arrayMove)}
-        onDragEnd={() => handleDragEnd( setActive, data)}
+        onDragEnd={(event) => handleDragEnd(event, setActive, data)}
         collisionDetection={closestCorners}
         sensors={sensors}
       >

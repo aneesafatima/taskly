@@ -69,14 +69,10 @@ exports.updateTask = catchAsync(async (req, res, next) => {
 exports.updateTasksOrder = catchAsync(async (req, res, next) => {
   const { data } = req.body;
 
-  // console.log(data.array);
-  // console.log(data.section);
-  console.log(data)
-
   const bulkOps = data.array.map((el, i) => ({
     updateOne: {
       filter: { _id: el._id },
-      update: { $set: { order: i, status: data.section ?? el.status } },
+      update: { $set: { order: i, status: data.section } },
     },
   }));
 

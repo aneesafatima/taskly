@@ -3,7 +3,8 @@ const getIndex = (tasks, type, id, container) => {
     if (type === "task")
       return tasks[container].findIndex((el, i) => el._id === id);
   };
-  export const handleDragStart = (event, setActive, tasks) => {
+  export const handleDragStart = (event, setAddTask, setActive, tasks) => {
+    setAddTask(false)
     const { active } = event;
     const { id } = active;
     console.log("START")
@@ -58,8 +59,9 @@ const getIndex = (tasks, type, id, container) => {
         console.log("Different container");
 
         const [removedItem] = activeContainer.splice(activeIndex, 1);
+        removedItem.status = overData.section;
         overContainer.splice(overIndex, 0, removedItem);
-       console.log(overData.section)
+          
         setTasks((prev) => ({
           ...prev,
           [activeData.section]: [...activeContainer],
@@ -83,6 +85,7 @@ const getIndex = (tasks, type, id, container) => {
       //For sorting task over another container
       console.log("Task in separate empty container")
       const [removedItem] = activeContainer.splice(activeIndex, 1);
+      removedItem.status = overData.section;
       overContainer.push(removedItem);
 
       setTasks((prev) => ({
@@ -98,7 +101,7 @@ const getIndex = (tasks, type, id, container) => {
     }
   };
  export const handleDragEnd = async (setActive, data) => {
-    setActive(null);
+
     if (data) {
       try {
         await axios.patch(

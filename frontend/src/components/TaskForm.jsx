@@ -11,8 +11,6 @@ import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for DateP
 import axios from "axios";
 
 function TaskForm() {
-  //refactor
-
   const {
     currentTask,
     setAddTask,
@@ -20,6 +18,7 @@ function TaskForm() {
     setCurrentTask,
     showLoader,
     setShowLoader,
+    tasks
   } = useContext(GlobalState);
 
   const [taskDetails, setTaskDetails] = useState({});

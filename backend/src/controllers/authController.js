@@ -13,7 +13,7 @@ const sendToken = (user, statusCode, res) => {
     ), //this property expects a date object
     secure: process.env.NODE_ENV === "development" ? false : true,
     path: "/",
-    sameSite:"None",
+    sameSite:  process.env.NODE_ENV === "development" ? "Strict" : "None",
     //only when in dev mode send the cookie over http otherwise https
     httpOnly: true, //to prevent cross-site scripting; meaning the cookie won't be accessible over clientside
   });
@@ -31,7 +31,7 @@ const createSendToken = (id) => {
   });
 };
 
-//data = ["name", "email", "status"]
+
 
 const filterObject = (req, ...data) => {
   const filteredObject = {};
@@ -81,12 +81,10 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   const currentUser = await User.findOne({ _id: decoded.id });
 
-
-
   if (!currentUser)
     return next(new ErrorHandler("There is no user belonging to this Id", 400));
 
-  console.log(currentUser)
+  console.log(currentUser);
 
   //check if token was issued before the password was changed
 

@@ -68,7 +68,7 @@ function auth() {
   };
 
   return (
-    <div className="p-3 rounded-lg lg:flex lg:items-center  h-screen  w-full overflow-hidden  lg:space-x-5">
+    <div className="p-3 rounded-lg lg:flex lg:items-center  h-svh  w-full overflow-hidden  lg:space-x-5">
       <img
         src={coverPng}
         alt="cover img"
