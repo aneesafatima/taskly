@@ -52,6 +52,30 @@ The most challenging part was implementing the drag-and-drop functionality and e
 
 Please make sure to replace the placeholders in these `.env.sample` files with your actual values in the `.env` files to run the application successfully.
 
+## 📁 Running the Project
+
+### Frontend
+1. Navigate to the `frontend` directory.
+2. Create a `.env` file from the `.env.sample` file provided.
+3. Replace the placeholders in the `.env` file with your actual values.
+4. Install the required dependencies by running:
+   ```bash
+   npm install
+5. Start the development server by running
+   ```bash
+   npm run dev
+
+### Backend 
+1. Navigate to the `backend` directory.
+2. Create a `.env` file from the `.env.sample` file provided.
+3. Replace the placeholders in the `.env` file with your actual values.
+4. Install the required dependencies by running:
+   ```bash
+   npm install
+5. Start the development server by running
+   ```bash
+   npm run start
+
 ## 🤔 How Can It Be Improved?
 While the current version of Taskly is robust and feature-rich, there are several areas for improvement:
 - **Profile Picture**: Allow users to upload and manage a profile picture.
