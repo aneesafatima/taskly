@@ -4,11 +4,11 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const http = require("http");
 dotenv.config({ path: "./.env" });
-
-const DB = process.env.DB_CONNECTION_STRING.replace(
-  "<password>",
-  process.env.DB_PASSWORD
-);
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const mongoSanitize = require("express-mongo-sanitize");
+const xss = require("xss-clean");
+const hpp = require("hpp");
 const userRouter = require("./routes/userRouter");
 const taskRouter = require("./routes/taskRouter");
 const dashboardRouter = require("./routes/dashboardRouter");
@@ -17,12 +17,55 @@ const app = express(); //app is an instance of express
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const settingsRouter = require("./routes/settingsRouter");
+const DB = process.env.DB_CONNECTION_STRING.replace(
+  "<password>",
+  process.env.DB_PASSWORD
+);
+
+//ERROR HANDLING
+
+// This will catch any uncaught exceptions from anywhere in your app
+process.on("uncaughtException", (err) => {
+  console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+  console.error(err.name, err.message);
+  process.exit(1);
+});
+// This will catch any unhandled promise rejections from anywhere in your app
+process.on("unhandledRejection", (err) => {
+  console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+  console.error(err.name, err.message);
+  // Attempt to close server gracefully before exiting
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+// Middleware setup
+// Set Security HTTP Headers using Helmet
+app.use(helmet());
+
+// Rate Limiting: Limit requests from the same IP
+const limiter = rateLimit({
+  max: 100, // Limit each IP to 100 requests per `window`
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  message: "Too many requests from this IP, please try again after an hour!",
+});
+app.use("/api", limiter); // Apply to routes that start with `/api`
+
+// Data Sanitization against NoSQL Injection attacks
+app.use(mongoSanitize());
+
+// Data Sanitization against XSS attacks
+app.use(xss());
+
+// Prevent HTTP Parameter Pollution
+app.use(hpp());
 app.use(
   cors(
     {
       origin: [
         "https://taskly-frontend-omega.vercel.app",
-        "http://localhost:5173"
+        "http://localhost:5173",
       ], // Your frontend origin
       methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
       credentials: true,
@@ -34,12 +77,6 @@ app.use(express.json());
 app.use(cookieParser());
 // Middleware to parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    status: "success",
-  });
-});
 
 app.use("/api/users", userRouter);
 app.use("/api/dashboard", dashboardRouter);
