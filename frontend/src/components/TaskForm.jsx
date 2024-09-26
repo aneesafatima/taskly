@@ -18,7 +18,6 @@ function TaskForm() {
     setCurrentTask,
     showLoader,
     setShowLoader,
-    tasks
   } = useContext(GlobalState);
 
   const [taskDetails, setTaskDetails] = useState({});

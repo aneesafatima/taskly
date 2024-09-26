@@ -1,6 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
 import { GlobalState } from "../context/GlobalState";
 import { IoMailOutline } from "react-icons/io5";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -11,7 +9,7 @@ import { PiPasswordLight } from "react-icons/pi";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { HiUserCircle } from "react-icons/hi";
 import { FaPerson } from "react-icons/fa6";
-import { showAlert } from "../assets/helpers";
+import useSettings from "../hooks/useSettings";
 
 function Settings() {
   const {
@@ -20,93 +18,11 @@ function Settings() {
     setPasswordDetails,
     setUserDetails,
     user,
-    seTGiveAccess,
     giveAccess,
-    setUser,
-    setShowLoader,
     showLoader,
-    setShowErr,
   } = useContext(GlobalState);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_URL}/api/settings`, {
-          withCredentials: true,
-        });
-
-        if (res.data?.status === "success") {
-          seTGiveAccess(true);
-          setUser(res.data.user);
-          setShowErr(false);
-        }
-      } catch (err) {
-        setShowErr({ status: true, message: err.message });
-      }
-    }
-    fetchData();
-  }, []);
-
-  const handleFormSubmission = async (e, type, data) => {
-    e.preventDefault();
-    try {
-      setShowLoader({ status: true, feature: type });
-
-      const res = await axios({
-        url:
-          type === "password"
-            ? `${import.meta.env.VITE_URL}/api/users/updateMyPassword`
-            : `${import.meta.env.VITE_URL}/api/users/updateMe`,
-        method: "PATCH",
-        data,
-        withCredentials: true,
-      });
-
-      if (res.data?.status === "success") {
-        setUser(res.data.user);
-
-        setTimeout(() => {
-          if (type === "password") {
-            document.getElementsByName("password")[0].value = "";
-            document.getElementsByName("new password")[0].value = "";
-            document.getElementsByName("confirm password")[0].value = "";
-          }
-          showAlert("Data updated !", "settings");
-          setShowLoader(false);
-        }, 1000);
-      }
-    } catch (err) {
-      showAlert(err.response.data.message, "settings");
-      setShowLoader(false);
-    }
-  };
-
-  const handleLogOutAndDelete = async (feature) => {
-    try {
-      setShowLoader({ status: true, feature });
-
-      const res = await axios({
-        url:
-          feature === "logout"
-            ? `${import.meta.env.VITE_URL}/api/users/logout`
-            : `${import.meta.env.VITE_URL}/api/users/deleteMe/${user._id}`,
-        method: feature === "logout" ? "GET" : "DELETE",
-        withCredentials: true,
-      });
-
-      if (res.data?.status === "success") {
-        setTimeout(() => {
-          seTGiveAccess(false);
-          setShowLoader(false);
-          setUser("");
-          navigate("/");
-        }, 1000);
-      }
-    } catch (err) {
-      setShowLoader(false);
-    }
-  };
+  const { handleFormSubmission, handleLogOutAndDelete } = useSettings();
 
   return (
     giveAccess && (
@@ -225,12 +141,12 @@ function Settings() {
           </div>
 
           <div className="form-item border-[1px] border-border-color rounded-lg flex items-center px-5 py-3 space-x-3 text-sm">
-            <CiLock size={18} className="thick-stroke text-priority-color" />
+          <MdOutlineFiberNew size={20} className="text-priority-color" />
             <input
               type="password"
               name="new password"
               className="w-full h-full font-roboto p-1 px-4 border-l-[1px] border-priority-color bg-transparent outline-none border-0 mode-items"
-              placeholder="Confirm your password"
+              placeholder="Enter new password"
               minLength={8}
               onChange={(e) =>
                 setPasswordDetails((prev) => ({
@@ -245,12 +161,12 @@ function Settings() {
             <MdCancel size={17} fill="red" className="cross " />
           </div>
           <div className="form-item border-[1px] border-border-color rounded-lg flex items-center px-5 py-3 space-x-3 text-sm">
-            <MdOutlineFiberNew size={20} className="text-priority-color" />
+            <CiLock size={18} className="thick-stroke text-priority-color" />
             <input
               type="password"
-              name="confirm password"
+              name="confirm new password"
               className="w-full h-full font-roboto p-1 px-4  border-l-[1px] border-priority-color bg-transparent outline-none border-0 mode-items"
-              placeholder="Enter new password"
+              placeholder="Confirm new password"
               minLength={8}
               onChange={(e) =>
                 setPasswordDetails((prev) => ({

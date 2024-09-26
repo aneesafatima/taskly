@@ -5,7 +5,6 @@ const dotenv = require("dotenv");
 const http = require("http");
 dotenv.config({ path: "./.env" });
 const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
@@ -43,14 +42,6 @@ process.on("unhandledRejection", (err) => {
 // Middleware setup
 // Set Security HTTP Headers using Helmet
 app.use(helmet());
-
-// Rate Limiting: Limit requests from the same IP
-const limiter = rateLimit({
-  max: 100, // Limit each IP to 100 requests per `window`
-  windowMs: 60 * 60 * 1000, // 1 hour window
-  message: "Too many requests from this IP, please try again after an hour!",
-});
-app.use("/api", limiter); // Apply to routes that start with `/api`
 
 // Data Sanitization against NoSQL Injection attacks
 app.use(mongoSanitize());

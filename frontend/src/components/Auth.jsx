@@ -29,6 +29,7 @@ function auth() {
     seTGiveAccess,
     setShowErr,
     setUser,
+    setRefetch
   } = useContext(GlobalState);
 
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ function auth() {
         }
       );
       if (res.data?.status === "success") {
+        setRefetch(true)
         setShowLoader(false);
         seTGiveAccess(true);
         setShowErr(false);
